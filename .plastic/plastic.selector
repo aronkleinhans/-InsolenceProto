@@ -1,0 +1,4 @@
+repository "Prototyping@InsolenceGameStudio@cloud"
+  path "/"
+    br "/main"
+    co "/main"
