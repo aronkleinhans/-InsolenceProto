@@ -16,6 +16,7 @@ public class PlayerControl : MonoBehaviour
     //[SerializeField] bool isGrounded = false;
     [SerializeField] float gravityMultiplier = 2f;
     [SerializeField] float groundedGravity = -0.5f;
+    [SerializeField] int applyFrequency = 2;
     [SerializeField] float gravity = 9.8f;
 
 
@@ -73,8 +74,12 @@ public class PlayerControl : MonoBehaviour
         if (controller.isGrounded && velocityY < 0f)
             velocityY = groundedGravity;
 
-        velocityY -= gravity * gravityMultiplier * Time.deltaTime;
-        controller.Move(Vector3.up * velocityY * Time.deltaTime);
+        for (int i = 0; i < applyFrequency; i++)
+        {
+            velocityY -= gravity * gravityMultiplier * Time.deltaTime;
+            controller.Move(Vector3.up * velocityY * Time.deltaTime);
+        }
+
     }
 
     private void HandleJump()
@@ -83,9 +88,6 @@ public class PlayerControl : MonoBehaviour
         {
             velocityY = Mathf.Sqrt(jumpHeight * 2f * gravity);
         }
-
-        velocityY -= gravity * gravityMultiplier * Time.deltaTime;
-        controller.Move(Vector3.up * velocityY * Time.deltaTime);
     }
 
     private IEnumerator DashCoroutine()
