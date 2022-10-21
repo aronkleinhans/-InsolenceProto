@@ -634,7 +634,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1126883433}
-  m_LocalRotation: {x: 0.18910751, y: 0.0000000084479606, z: -0.0000000016269286, w: 0.9819564}
+  m_LocalRotation: {x: 0.18910751, y: -0.000000008447955, z: 0.0000000016269276, w: 0.9819564}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -992,8 +992,8 @@ GameObject:
   - component: {fileID: 1852908012}
   - component: {fileID: 6319295508022191063}
   - component: {fileID: 1819448853}
-  - component: {fileID: 8798147850293926890}
   - component: {fileID: 1704628071}
+  - component: {fileID: 5061374081091336582}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -1084,21 +1084,8 @@ MonoBehaviour:
   dashTime: 0.2
   gravityMultiplier: 2
   groundedGravity: -0.5
+  applyFrequency: 2
   gravity: 9.8
---- !u!114 &8798147850293926890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5061374082900291478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6a0906477854dd49b1cfcb43de6a1c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiCanvas: {fileID: 0}
-  targetInteractable: {fileID: 0}
 --- !u!114 &1704628071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1119,6 +1106,20 @@ MonoBehaviour:
     sceneName: 
     position: []
     rotation: []
-    isPrefab: 0
+    isPrefab: 1
     prefabGuid: 597c9517-dc4c-4efd-9e9b-d20ff9a109e1
     childrenGuids: []
+--- !u!114 &5061374081091336582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5061374082900291478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6a0906477854dd49b1cfcb43de6a1c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiCanvas: {fileID: 0}
+  targetInteractable: {fileID: 0}

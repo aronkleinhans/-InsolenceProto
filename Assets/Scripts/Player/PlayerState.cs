@@ -4,15 +4,15 @@ using UnityEngine;
 public class PlayerState : MonoBehaviour
 {
     [Header ("Player Stats")]
-    [SerializeField] int level = 1;
-    [SerializeField] int health = 50;
-    [SerializeField ]public new string name = "Bob";
+    [SerializeField] public int level = 1;
+    [SerializeField] public int health = 50;
+    [SerializeField] public new string name = "Bob";
 
-    [Header ("Player Info")]
-    [SerializeField] string currentScene;
+
+    [SerializeField] public string currentScene;
 
     private void Start()
-    {
+    {   
         DynamicObject dynamicObject = GetComponent<DynamicObject>();
         dynamicObject.prepareToSaveDelegates += PrepareToSaveObjectState;
         dynamicObject.loadObjectStateDelegates += LoadObjectState;
@@ -28,7 +28,7 @@ public class PlayerState : MonoBehaviour
         objectState.genericValues["PlayerStats.level"] = level;
         objectState.genericValues["PlayerStats.health"] = health;
         objectState.genericValues["PlayerStats.name"] = name;
-        objectState.genericValues["SavedLevel"] = currentScene;
+        objectState.genericValues["savedLevel"] = currentScene;
     }
     private void LoadObjectState(ObjectState objectState)
     {
@@ -39,7 +39,7 @@ public class PlayerState : MonoBehaviour
         level = Convert.ToInt32 (objectState.genericValues["PlayerStats.level"]);
         health = Convert.ToInt32(objectState.genericValues["PlayerStats.health"]);
         name = Convert.ToString(objectState.genericValues["PlayerStats.name"]);
-
+        currentScene = Convert.ToString(objectState.genericValues["savedLevel"]);
 
     }
 }

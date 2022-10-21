@@ -107,9 +107,15 @@ public class ObjectState
         return objectStates;
     }
 
-    public static void LoadObjects(Dictionary<string, GameObject> prefabs, List<ObjectState> objectStates, GameObject rootObject)
+    public static void LoadObjects(Dictionary<string, GameObject> prefabs, List<ObjectState> objectStates, GameObject rootObject, string sceneName)
     {
-        ClearChildren(rootObject);
+        Debug.Log("Loading Objects for " + sceneName);
+
+        if (objectStates.Exists( x => x.sceneName == sceneName))
+        {
+            ClearChildren(rootObject);
+        }
+
 
         Dictionary<string, GameObject> createdObjects = new Dictionary<string, GameObject>();
 
@@ -118,51 +124,59 @@ public class ObjectState
             GameObject createdObject;
             DynamicObject dynamicObject;
 
-            if (objectState.isPrefab)
+            if (objectState.sceneName == sceneName)
             {
-                // Do we have a prefab with the required guid?
-                if (!prefabs.ContainsKey(objectState.prefabGuid))
+
+                if (objectState.isPrefab)
                 {
-                    throw new InvalidOperationException("Prefab with guid " + objectState.prefabGuid + " not found.");
+                    // Do we have a prefab with the required guid?
+                    if (!prefabs.ContainsKey(objectState.prefabGuid))
+                    {
+                        throw new InvalidOperationException("Prefab with guid " + objectState.prefabGuid + " not found.");
+                    }
+
+                    // Instantiate the prefab at the specified position
+                    createdObject = UnityEngine.Object.Instantiate(prefabs[objectState.prefabGuid]);
+                    // Find the DynamicObject component and set the object state
+                    dynamicObject = createdObject.GetComponent<DynamicObject>();
+                }
+                else
+                {
+                    // Create a new object
+                    createdObject = new GameObject();
+                    // Add a SaveableObject component and set the object state
+                    dynamicObject = createdObject.AddComponent<DynamicObject>();
                 }
 
-                // Instantiate the prefab at the specified position
-                createdObject = UnityEngine.Object.Instantiate(prefabs[objectState.prefabGuid]);
-                // Find the DynamicObject component and set the object state
-                dynamicObject = createdObject.GetComponent<DynamicObject>();
-            }
-            else
-            {
-                // Create a new object
-                createdObject = new GameObject();
-                // Add a SaveableObject component and set the object state
-                dynamicObject = createdObject.AddComponent<DynamicObject>();
-            }
+                dynamicObject.Load(objectState);
 
-            dynamicObject.Load(objectState);
-
-            // Find and add the children
-            foreach (string childGuid in objectState.childrenGuids)
-            {
-                if (!createdObjects.ContainsKey(childGuid))
+                // Find and add the children
+                foreach (string childGuid in objectState.childrenGuids)
                 {
-                    Debug.Log("Cannot find child with guid " + childGuid);
-                    continue;
+                    if (!createdObjects.ContainsKey(childGuid))
+                    {
+                        Debug.Log("Cannot find child with guid " + childGuid);
+                        continue;
+                    }
+                    createdObjects[childGuid].transform.SetParent(createdObject.transform);
                 }
-                createdObjects[childGuid].transform.SetParent(createdObject.transform);
-            }
 
-            // Set the object's name, position, etc, and attach it to the root (it can get attached to a different parent later)
-            createdObject.name = objectState.objectName;
-            createdObject.tag = objectState.objectTag;
-            createdObject.layer = objectState.objectLayer;
-            Vector3 position = SaveUtils.ConvertToVector3(objectState.position);
-            Quaternion rotation = SaveUtils.ConvertToQuaternion(objectState.rotation);
-            createdObject.transform.position = position;
-            createdObject.transform.rotation = rotation;
-            createdObject.transform.SetParent(rootObject.transform);
-            // Save the object into the dictionary
-            createdObjects.Add(objectState.guid, createdObject);
+                // Set the object's name, position, etc, and attach it to the root (it can get attached to a different parent later)
+                createdObject.name = objectState.objectName;
+                createdObject.tag = objectState.objectTag;
+                createdObject.layer = objectState.objectLayer;
+                createdObject.GetComponent<DynamicObject>().objectState.sceneName = objectState.sceneName.ToString();
+
+                Vector3 position = SaveUtils.ConvertToVector3(objectState.position);
+                Quaternion rotation = SaveUtils.ConvertToQuaternion(objectState.rotation);
+                createdObject.transform.position = position;
+                createdObject.transform.rotation = rotation;
+
+                createdObject.transform.SetParent(rootObject.transform);
+                // Save the object into the dictionary
+                createdObjects.Add(objectState.guid, createdObject);
+            }
+            else continue;
         }
     }
 

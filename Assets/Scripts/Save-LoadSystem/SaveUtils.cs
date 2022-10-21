@@ -1,20 +1,41 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveUtils
 {
     // The directory under Resources that the dynamic objects' prefabs can be loaded from
-    private static string PREFABS_PATH = "Prefabs/Environment/Interactables";
+    private static string ENVIRONMENT_PREFABS_PATH = "Prefabs/Environment/DynamicObjects";
+    private static string CHARACTERS_PREFABS_PATH = "Prefabs/Characters";
     // A dictionary of prefab guid to prefab
-    public static Dictionary<string, GameObject> prefabs = LoadPrefabs(PREFABS_PATH);
+    public static Dictionary<string, GameObject> envPrefabs = LoadPrefabs(ENVIRONMENT_PREFABS_PATH);
+    public static Dictionary<string, GameObject> charPrefabs = LoadPrefabs(CHARACTERS_PREFABS_PATH);
 
-    
+    public static Dictionary<string, GameObject>[] prefabCollection = new Dictionary<string, GameObject>[] { envPrefabs, charPrefabs };
+
+    public static Dictionary<string, GameObject> mergedPrefabs = mergeDictionaries(prefabCollection);
+
+
     public static string SAVE_OBJECTS_PATH = Application.dataPath + "/savegames/default.inso";
     public static string SAVE_PLAYER_PATH = Application.dataPath + "/savegames/default.insp";
+
+    private static Dictionary<string, GameObject> mergeDictionaries(Dictionary<string, GameObject>[] dictionaries)
+    {
+        Dictionary<string, GameObject> result = new Dictionary<string, GameObject>();
+        foreach (var dict in dictionaries)
+        {
+            foreach (var item in dict)
+            {
+                result.Add(item.Key, item.Value);
+            }
+        }
+        return result;
+    }
 
     private static Dictionary<string, GameObject> LoadPrefabs(string prefabsPath)
     {
@@ -33,23 +54,42 @@ public class SaveUtils
                 throw new InvalidOperationException("Prefab's ObjectState isPrefab = false");
             }
             prefabs.Add(dynamicObject.objectState.prefabGuid, prefab);
+            Debug.Log(prefab.name);
         }
 
         Debug.Log("Loaded " + prefabs.Count + " saveable prefabs.");
+
+            
+
         return prefabs;
     }
-    public static void DoSave()
+    public static void DoSave(string sceneName)
     {
         SavePlayer(SAVE_PLAYER_PATH);
-        SaveDynamicObjects(SAVE_OBJECTS_PATH);
+        SaveDynamicObjects(SAVE_OBJECTS_PATH, sceneName);
+
+        MenuController mc = GameObject.FindGameObjectWithTag("GameManager").GetComponentInChildren<MenuController>();
+        PlayerState ps = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerState>();
+        mc.levelToLoad = ps.currentScene;
     }
 
-    public static void DoLoad()
+    public static void DoLoad(string playerPath , string objPath, bool menuLoad, string sceneName)
     {
-        LoadPlayer(SAVE_PLAYER_PATH);
-        LoadDynamicObjects(SAVE_OBJECTS_PATH);
+        if (playerPath == "") playerPath = SAVE_PLAYER_PATH;
+        if (objPath == "") objPath = SAVE_OBJECTS_PATH;
+
+        if (menuLoad)
+        {
+            LoadDynamicObjects(objPath, sceneName);
+            LoadPlayer(playerPath);
+        }
+        else
+        {
+            LoadDynamicObjects(objPath, sceneName);
+        }
+
     }
-    private static GameObject GetPlayer()
+    public static GameObject GetPlayer()
     {
         return GameObject.FindGameObjectWithTag("Player");
     }
@@ -65,7 +105,19 @@ public class SaveUtils
         }
         throw new InvalidOperationException("Cannot find root of dynamic objects");
     }
+    public static string GetSavedSceneName(string path)
+    {
+        if (File.Exists(path))
+        {
+            ObjectState objectState = ReadFile<ObjectState>(path);
+            return objectState.genericValues["savedLevel"].ToString();
+        }
+        else 
+        {
+            throw new InvalidOperationException("cannot find scene name!");      
+        }
 
+    }
     public static void SavePlayer(string path)
     {
         GameObject player = GetPlayer();
@@ -96,30 +148,28 @@ public class SaveUtils
         {
             ObjectState objectState = ReadFile<ObjectState>(path);
 
-            MenuController menuController = GameObject.FindObjectOfType<MenuController>();
-            menuController.LoadGameDialogYes(objectState);
-
             GameObject player = GetPlayer();
             if (player == null)
             {
-                throw new InvalidOperationException("Cannot find the PLayer");
+                throw new InvalidOperationException("Cannot find the Player");
             }
 
             DynamicObject dynamicObject = player.GetComponent<DynamicObject>();
             dynamicObject.Load(objectState);
 
+            SAVE_PLAYER_PATH = path;
             Debug.Log("Loaded Player from: " + path);
-
         }
         else
         {
-            GameObject noSave = GameObject.FindObjectOfType<MenuController>().getNoSaveDialog();
+            
+            GameObject noSave = GameObject.FindObjectOfType<MenuController>().GetNoSaveDialog();
             noSave.SetActive(true);
             Debug.LogError("Save file not found in " + SAVE_PLAYER_PATH);
         }
     }
 
-    private static void SaveDynamicObjects(string path)
+    private static void SaveDynamicObjects(string path, string sceneName)
     {
         GameObject player = GetPlayer();
         if (player == null)
@@ -129,19 +179,42 @@ public class SaveUtils
         path = Application.dataPath + "/savegames/" + player.GetComponent<PlayerState>().name;
 
         path = IteratePath(path, "obj", 1);
-        
 
-        List<ObjectState> objectStates = ObjectState.SaveObjects(GetRootDynamicObject());
-        WriteFile(path, objectStates);
-        Debug.Log("Saved objects to: " + path);
+        if (File.Exists(path))
+        {
+            List<ObjectState> objectStates = ReadFile<List<ObjectState>>(path);
+
+            Debug.Log("save path in SaveDynamicObjects(): " + path);
+
+            foreach (ObjectState objectState in objectStates.ToArray())
+            {
+                if (objectState.sceneName == sceneName)
+                {
+                    objectStates.Remove(objectState);
+                }
+            }
+
+            objectStates.AddRange(ObjectState.SaveObjects(GetRootDynamicObject()));
+            WriteFile(path, objectStates);
+            Debug.Log("Updated objects in: " + path);
+        }
+        else
+        {
+            List<ObjectState> objectStates = ObjectState.SaveObjects(GetRootDynamicObject());
+            WriteFile(path, objectStates);
+            Debug.Log("Saved objects to: " + path);
+        }
     }
 
-    private static void LoadDynamicObjects(string path)
+    private static void LoadDynamicObjects(string path, string sceneName)
     {
+        SAVE_OBJECTS_PATH = path;
 
         List<ObjectState> objectStates = ReadFile<List<ObjectState>>(path);
 
-        ObjectState.LoadObjects(prefabs, objectStates, GetRootDynamicObject());
+        ObjectState.LoadObjects(mergedPrefabs, objectStates, GetRootDynamicObject(), sceneName);
+
+        
         Debug.Log("Loaded objects from: " + path);
     }
 
@@ -164,6 +237,7 @@ public class SaveUtils
                 path = Application.dataPath + "/savegames/" + player.GetComponent<PlayerState>().name + "[" + i + "]" ;
                 i += 1;
                 path = IteratePath(path, type, i);
+                
             }
             else
             {
@@ -183,6 +257,7 @@ public class SaveUtils
             }
             else
             {
+                
                 path += ".insp";
             }
 
@@ -191,9 +266,13 @@ public class SaveUtils
 
         }
         return null;
+    }
 
-            
+    public static string[] GetSaves()
+    {
+        string[] saves = System.IO.Directory.GetFiles(Application.dataPath + "/savegames/");
 
+        return saves;
     }
     private static void WriteFile<T>(string path, T obj)
     {

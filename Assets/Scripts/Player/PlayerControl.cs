@@ -31,6 +31,7 @@ public class PlayerControl : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         cam = Camera.main;
+        cam.transform.position = controller.transform.position;
     }
     // Update is called once per frame
     void Update()

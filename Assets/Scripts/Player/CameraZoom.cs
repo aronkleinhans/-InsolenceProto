@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraZoom : MonoBehaviour
 {
     [Header("Zoom Settings")]
-    [SerializeField] Cinemachine.CinemachineFreeLook cam;
+    [SerializeField] Cinemachine.CinemachineFreeLook cam = null;
     [SerializeField]  float[] minCameraDistance = {1f, 4f, 1f};
     [SerializeField] float[] maxCameraDistance = { 10f, 13f, 10f };
     [SerializeField] float[] currentCameraDistance = new float[3];
@@ -14,9 +15,21 @@ public class CameraZoom : MonoBehaviour
     private void Update()
     {
         //check if cam exists, else log no cam
-        if (cam == null)
+        if (cam == null && SceneManager.GetActiveScene().name != "MainMenu")
         {
-            Debug.Log("No zoomable camera attached!");
+            Debug.Log("current scene: " + SceneManager.GetActiveScene().name);
+            Debug.Log("No zoomable camera attached! searching...");
+            cam = SaveUtils.GetPlayer().GetComponentInChildren<Cinemachine.CinemachineFreeLook>();
+
+            if(cam != null)
+            {
+                Debug.Log("Found Camera!");
+            }
+        }
+        else if(cam == null && SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            Debug.Log("getting temp FreeLook Cam on main menu!");
+            cam = GameObject.Find("CM FreeLook1").GetComponent<Cinemachine.CinemachineFreeLook>();
         }
         else { 
             //get current distances
