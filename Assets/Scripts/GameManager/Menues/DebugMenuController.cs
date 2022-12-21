@@ -15,7 +15,7 @@ public class DebugMenuController : MonoBehaviour
     private void Start()
     {
         saveButton.onClick.AddListener(() => {
-            SaveUtils.DoSave(MenuController.GetCurrentSceneName());
+            SaveUtils.DoSave(GameManager.GetCurrentSceneName());
         });
     }
 

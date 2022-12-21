@@ -138,7 +138,9 @@ public class SaveUtils
             throw new InvalidOperationException("Expected only 1 object state for the Player");
         }
         WriteFile(path, objectStates[0]);
-        
+
+        string json = JsonConvert.SerializeObject(objectStates[0], Formatting.Indented); File.WriteAllText(path+".txt", json);
+
         Debug.Log("Saved Player to: " + path);
     }
 
@@ -195,12 +197,17 @@ public class SaveUtils
             }
 
             objectStates.AddRange(ObjectState.SaveObjects(GetRootDynamicObject()));
+            string json = JsonConvert.SerializeObject(objectStates, Formatting.Indented); File.WriteAllText(path+".txt", json);
+
             WriteFile(path, objectStates);
             Debug.Log("Updated objects in: " + path);
         }
         else
         {
+            
             List<ObjectState> objectStates = ObjectState.SaveObjects(GetRootDynamicObject());
+
+            string json = JsonConvert.SerializeObject(objectStates, Formatting.Indented); File.WriteAllText(path+".txt", json);
             WriteFile(path, objectStates);
             Debug.Log("Saved objects to: " + path);
         }

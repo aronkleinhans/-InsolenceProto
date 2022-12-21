@@ -42,8 +42,10 @@ public class PlayerControl : MonoBehaviour
         HandleJump();
  
         //HandleLockOn();
+        
     }
 
+    
     private void HandleMovement()
     {
         Vector3 movement = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;

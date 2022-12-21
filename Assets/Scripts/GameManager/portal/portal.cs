@@ -1,3 +1,4 @@
+using KinematicCharacterController;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,14 +14,16 @@ public class portal : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if (other.GetComponent<PlayerCharacterController>())
         {
-            menuController = GameObject.Find("GameManager").GetComponent<MenuController>();
+            Debug.Log("Player entered portal: " + other.name);
+            
+            GameManager GM = GameObject.Find("GameManager").GetComponent<GameManager>();
 
-            other.transform.position = gameObject.GetComponentInChildren<SpawnPlayer>().transform.position;
+            other.GetComponent<KinematicCharacterMotor>().SetPosition(gameObject.GetComponentInChildren<SpawnPlayer>().transform.position);
 
-            menuController.SaveOnPortal();
-            menuController.LoadOnPortal(targetScene, targetSpawn);
+            GM.SaveOnPortal();
+            GM.LoadOnPortal(targetScene, targetSpawn);
         }
     }
 }

@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using KinematicCharacterController;
 
 public class SpawnPlayer : MonoBehaviour
 {
     public GameObject player;
     public GameObject spawned;
+    public KinematicCharacterMotor kcc;
     public GameObject Spawn()
     {
         Destroy(SaveUtils.GetPlayer());
         spawned = Instantiate(player);
-
-        spawned.transform.position = transform.position;
-        spawned.transform.rotation = transform.rotation;
+        kcc = spawned.GetComponent<KinematicCharacterMotor>();
+        kcc.SetPosition(transform.position);
+        kcc.SetRotation(transform.rotation);
 
         return spawned;
     }
