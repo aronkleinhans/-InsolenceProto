@@ -1,359 +1,366 @@
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Insolence.KinematicCharacterController;
 
-public class SaveUtils
+namespace Insolence.core
 {
-    // The directory under Resources that the dynamic objects' prefabs can be loaded from
-    private static string ENVIRONMENT_PREFABS_PATH = "Prefabs/Environment/DynamicObjects";
-    private static string CHARACTERS_PREFABS_PATH = "Prefabs/Characters";
-    // A dictionary of prefab guid to prefab
-    public static Dictionary<string, GameObject> envPrefabs = LoadPrefabs(ENVIRONMENT_PREFABS_PATH);
-    public static Dictionary<string, GameObject> charPrefabs = LoadPrefabs(CHARACTERS_PREFABS_PATH);
-
-    public static Dictionary<string, GameObject>[] prefabCollection = new Dictionary<string, GameObject>[] { envPrefabs, charPrefabs };
-
-    public static Dictionary<string, GameObject> mergedPrefabs = mergeDictionaries(prefabCollection);
-
-
-    public static string SAVE_OBJECTS_PATH = Application.dataPath + "/savegames/default.inso";
-    public static string SAVE_PLAYER_PATH = Application.dataPath + "/savegames/default.insp";
-
-    private static Dictionary<string, GameObject> mergeDictionaries(Dictionary<string, GameObject>[] dictionaries)
+    public class SaveUtils
     {
-        Dictionary<string, GameObject> result = new Dictionary<string, GameObject>();
-        foreach (var dict in dictionaries)
+        // The directory under Resources that the dynamic objects' prefabs can be loaded from
+        private static string ENVIRONMENT_PREFABS_PATH = "Prefabs/Environment/DynamicObjects";
+        private static string CHARACTERS_PREFABS_PATH = "Prefabs/Characters";
+        // A dictionary of prefab guid to prefab
+        public static Dictionary<string, GameObject> envPrefabs = LoadPrefabs(ENVIRONMENT_PREFABS_PATH);
+        public static Dictionary<string, GameObject> charPrefabs = LoadPrefabs(CHARACTERS_PREFABS_PATH);
+
+        public static Dictionary<string, GameObject>[] prefabCollection = new Dictionary<string, GameObject>[] { envPrefabs, charPrefabs };
+
+        public static Dictionary<string, GameObject> mergedPrefabs = mergeDictionaries(prefabCollection);
+
+
+        public static string SAVE_OBJECTS_PATH = Application.dataPath + "/savegames/default.inso";
+        public static string SAVE_PLAYER_PATH = Application.dataPath + "/savegames/default.insp";
+
+        private static Dictionary<string, GameObject> mergeDictionaries(Dictionary<string, GameObject>[] dictionaries)
         {
-            foreach (var item in dict)
+            Dictionary<string, GameObject> result = new Dictionary<string, GameObject>();
+            foreach (var dict in dictionaries)
             {
-                result.Add(item.Key, item.Value);
+                foreach (var item in dict)
+                {
+                    result.Add(item.Key, item.Value);
+                }
             }
+            return result;
         }
-        return result;
-    }
 
-    private static Dictionary<string, GameObject> LoadPrefabs(string prefabsPath)
-    {
-        Dictionary<string, GameObject> prefabs = new Dictionary<string, GameObject>();
-
-        GameObject[] allPrefabs = Resources.LoadAll<GameObject>(prefabsPath);
-        foreach (GameObject prefab in allPrefabs)
+        private static Dictionary<string, GameObject> LoadPrefabs(string prefabsPath)
         {
-            DynamicObject dynamicObject = prefab.GetComponent<DynamicObject>();
-            if (dynamicObject == null)
+            Dictionary<string, GameObject> prefabs = new Dictionary<string, GameObject>();
+
+            GameObject[] allPrefabs = Resources.LoadAll<GameObject>(prefabsPath);
+            foreach (GameObject prefab in allPrefabs)
             {
-                throw new InvalidOperationException("Prefab does not contain DynamicObject");
+                DynamicObject dynamicObject = prefab.GetComponent<DynamicObject>();
+                if (dynamicObject == null)
+                {
+                    throw new InvalidOperationException("Prefab does not contain DynamicObject");
+                }
+                if (!dynamicObject.objectState.isPrefab)
+                {
+                    throw new InvalidOperationException("Prefab's ObjectState isPrefab = false");
+                }
+                prefabs.Add(dynamicObject.objectState.prefabGuid, prefab);
+                Debug.Log(prefab.name);
             }
-            if (!dynamicObject.objectState.isPrefab)
+
+            Debug.Log("Loaded " + prefabs.Count + " saveable prefabs.");
+
+
+
+            return prefabs;
+        }
+        public static void DoSave(string sceneName)
+        {
+            SavePlayer(SAVE_PLAYER_PATH);
+            SaveDynamicObjects(SAVE_OBJECTS_PATH, sceneName);
+
+            MenuController mc = GameObject.FindGameObjectWithTag("GameManager").GetComponentInChildren<MenuController>();
+            CharacterState ps = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CharacterState>();
+            mc.levelToLoad = ps.currentScene;
+        }
+
+        public static void DoLoad(string playerPath, string objPath, bool menuLoad, string sceneName)
+        {
+            if (playerPath == "") playerPath = SAVE_PLAYER_PATH;
+            if (objPath == "") objPath = SAVE_OBJECTS_PATH;
+
+            if (menuLoad)
             {
-                throw new InvalidOperationException("Prefab's ObjectState isPrefab = false");
+                LoadDynamicObjects(objPath, sceneName);
+                LoadPlayer(playerPath);
             }
-            prefabs.Add(dynamicObject.objectState.prefabGuid, prefab);
-            Debug.Log(prefab.name);
-        }
-
-        Debug.Log("Loaded " + prefabs.Count + " saveable prefabs.");
-
-            
-
-        return prefabs;
-    }
-    public static void DoSave(string sceneName)
-    {
-        SavePlayer(SAVE_PLAYER_PATH);
-        SaveDynamicObjects(SAVE_OBJECTS_PATH, sceneName);
-
-        MenuController mc = GameObject.FindGameObjectWithTag("GameManager").GetComponentInChildren<MenuController>();
-        PlayerState ps = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<PlayerState>();
-        mc.levelToLoad = ps.currentScene;
-    }
-
-    public static void DoLoad(string playerPath , string objPath, bool menuLoad, string sceneName)
-    {
-        if (playerPath == "") playerPath = SAVE_PLAYER_PATH;
-        if (objPath == "") objPath = SAVE_OBJECTS_PATH;
-
-        if (menuLoad)
-        {
-            LoadDynamicObjects(objPath, sceneName);
-            LoadPlayer(playerPath);
-        }
-        else
-        {
-            LoadDynamicObjects(objPath, sceneName);
-        }
-
-    }
-    public static GameObject GetPlayer()
-    {
-        return GameObject.FindGameObjectWithTag("Player");
-    }
-
-    private static GameObject GetRootDynamicObject()
-    {
-        foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("DynamicRoot"))
-        {
-            if (gameObject.activeSelf)
+            else
             {
-                return gameObject;
+                LoadDynamicObjects(objPath, sceneName);
             }
+
         }
-        throw new InvalidOperationException("Cannot find root of dynamic objects");
-    }
-    public static string GetSavedSceneName(string path)
-    {
-        if (File.Exists(path))
+        public static GameObject GetPlayer()
         {
-            ObjectState objectState = ReadFile<ObjectState>(path);
-            return objectState.genericValues["savedLevel"].ToString();
-        }
-        else 
-        {
-            throw new InvalidOperationException("cannot find scene name!");      
+            return GameObject.FindGameObjectWithTag("Player");
         }
 
-    }
-    public static void SavePlayer(string path)
-    {
-        GameObject player = GetPlayer();
-        if (player == null)
+        private static GameObject GetRootDynamicObject()
         {
-            throw new InvalidOperationException("Cannot find the Player");
+            foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("DynamicRoot"))
+            {
+                if (gameObject.activeSelf)
+                {
+                    return gameObject;
+                }
+            }
+            throw new InvalidOperationException("Cannot find root of dynamic objects");
         }
-        path = Application.dataPath + "/savegames/" + player.GetComponent<PlayerState>().name;
-
-        path = IteratePath(path, "player", 1);
-        
-
-        DynamicObject dynamicObject = player.GetComponent<DynamicObject>();
-        List<ObjectState> objectStates = dynamicObject.objectState.Save(player);
-
-        if (objectStates.Count != 1)
+        public static string GetSavedSceneName(string path)
         {
-            throw new InvalidOperationException("Expected only 1 object state for the Player");
+            if (File.Exists(path))
+            {
+                ObjectState objectState = ReadFile<ObjectState>(path);
+                return objectState.genericValues["savedLevel"].ToString();
+            }
+            else
+            {
+                throw new InvalidOperationException("cannot find scene name!");
+            }
+
         }
-        WriteFile(path, objectStates[0]);
-
-        string json = JsonConvert.SerializeObject(objectStates[0], Formatting.Indented); File.WriteAllText(path+".txt", json);
-
-        Debug.Log("Saved Player to: " + path);
-    }
-
-    public static void LoadPlayer(string path)
-    {
-        if (File.Exists(path))
+        public static void SavePlayer(string path)
         {
-            ObjectState objectState = ReadFile<ObjectState>(path);
-
             GameObject player = GetPlayer();
             if (player == null)
             {
                 throw new InvalidOperationException("Cannot find the Player");
             }
+            path = Application.dataPath + "/savegames/" + player.GetComponent<CharacterState>().name;
+
+            path = IteratePath(path, "player", 1);
+
 
             DynamicObject dynamicObject = player.GetComponent<DynamicObject>();
-            dynamicObject.Load(objectState);
+            List<ObjectState> objectStates = dynamicObject.objectState.Save(player);
 
-            SAVE_PLAYER_PATH = path;
-            Debug.Log("Loaded Player from: " + path);
+            if (objectStates.Count != 1)
+            {
+                throw new InvalidOperationException("Expected only 1 object state for the Player");
+            }
+            WriteFile(path, objectStates[0]);
+
+            string json = JsonConvert.SerializeObject(objectStates[0], Formatting.Indented); File.WriteAllText(path + ".txt", json);
+
+            Debug.Log("Saved Player to: " + path);
         }
-        else
+
+        public static void LoadPlayer(string path)
         {
-            
-            GameObject noSave = GameObject.FindObjectOfType<MenuController>().GetNoSaveDialog();
-            noSave.SetActive(true);
-            Debug.LogError("Save file not found in " + SAVE_PLAYER_PATH);
+            if (File.Exists(path))
+            {
+                ObjectState objectState = ReadFile<ObjectState>(path);
+
+                GameObject player = GetPlayer();
+                if (player == null)
+                {
+
+                    throw new InvalidOperationException("Cannot find the Player...spawning clone");
+
+                }
+
+                DynamicObject dynamicObject = player.GetComponent<DynamicObject>();
+
+                player.GetComponent<KineCharacterController>().Motor.SetPositionAndRotation(ConvertToVector3(objectState.position), ConvertToQuaternion(objectState.rotation));
+
+                dynamicObject.Load(objectState);
+
+                SAVE_PLAYER_PATH = path;
+                Debug.Log("Loaded Player from: " + path);
+            }
+            else
+            {
+
+                GameObject noSave = UnityEngine.Object.FindObjectOfType<MenuController>().GetNoSaveDialog();
+                noSave.SetActive(true);
+                Debug.LogError("Save file not found in " + SAVE_PLAYER_PATH);
+            }
         }
-    }
 
-    private static void SaveDynamicObjects(string path, string sceneName)
-    {
-        GameObject player = GetPlayer();
-        if (player == null)
+        private static void SaveDynamicObjects(string path, string sceneName)
         {
-            throw new InvalidOperationException("Cannot find the Player");
+            GameObject player = GetPlayer();
+            if (player == null)
+            {
+                throw new InvalidOperationException("Cannot find the Player");
+            }
+            path = Application.dataPath + "/savegames/" + player.GetComponent<CharacterState>().name;
+
+            path = IteratePath(path, "obj", 1);
+
+            if (File.Exists(path))
+            {
+                List<ObjectState> objectStates = ReadFile<List<ObjectState>>(path);
+
+                Debug.Log("save path in SaveDynamicObjects(): " + path);
+
+                foreach (ObjectState objectState in objectStates.ToArray())
+                {
+                    if (objectState.sceneName == sceneName)
+                    {
+                        objectStates.Remove(objectState);
+                    }
+                }
+
+                objectStates.AddRange(ObjectState.SaveObjects(GetRootDynamicObject()));
+                string json = JsonConvert.SerializeObject(objectStates, Formatting.Indented); File.WriteAllText(path + ".txt", json);
+
+                WriteFile(path, objectStates);
+                Debug.Log("Updated objects in: " + path);
+            }
+            else
+            {
+
+                List<ObjectState> objectStates = ObjectState.SaveObjects(GetRootDynamicObject());
+
+                string json = JsonConvert.SerializeObject(objectStates, Formatting.Indented); File.WriteAllText(path + ".txt", json);
+                WriteFile(path, objectStates);
+                Debug.Log("Saved objects to: " + path);
+            }
         }
-        path = Application.dataPath + "/savegames/" + player.GetComponent<PlayerState>().name;
 
-        path = IteratePath(path, "obj", 1);
-
-        if (File.Exists(path))
+        private static void LoadDynamicObjects(string path, string sceneName)
         {
+            SAVE_OBJECTS_PATH = path;
+
             List<ObjectState> objectStates = ReadFile<List<ObjectState>>(path);
 
-            Debug.Log("save path in SaveDynamicObjects(): " + path);
+            ObjectState.LoadObjects(mergedPrefabs, objectStates, GetRootDynamicObject(), sceneName);
 
-            foreach (ObjectState objectState in objectStates.ToArray())
+
+            Debug.Log("Loaded objects from: " + path);
+        }
+
+        private static string IteratePath(string originalPath, string type, int i)
+        {
+            string path = originalPath;
+
+            GameObject player = GetPlayer();
+
+            if (player == null)
             {
-                if (objectState.sceneName == sceneName)
+                throw new InvalidOperationException("Cannot find the Player");
+            }
+
+
+            if (type == "obj")
+            {
+                if (File.Exists(originalPath + ".inso") && SAVE_OBJECTS_PATH != originalPath + ".inso")
                 {
-                    objectStates.Remove(objectState);
+                    path = Application.dataPath + "/savegames/" + player.GetComponent<CharacterState>().name + "[" + i + "]";
+                    i += 1;
+                    path = IteratePath(path, type, i);
+
                 }
+                else
+                {
+                    path += ".inso";
+                }
+                SAVE_OBJECTS_PATH = path;
+                return path;
+
             }
-
-            objectStates.AddRange(ObjectState.SaveObjects(GetRootDynamicObject()));
-            string json = JsonConvert.SerializeObject(objectStates, Formatting.Indented); File.WriteAllText(path+".txt", json);
-
-            WriteFile(path, objectStates);
-            Debug.Log("Updated objects in: " + path);
-        }
-        else
-        {
-            
-            List<ObjectState> objectStates = ObjectState.SaveObjects(GetRootDynamicObject());
-
-            string json = JsonConvert.SerializeObject(objectStates, Formatting.Indented); File.WriteAllText(path+".txt", json);
-            WriteFile(path, objectStates);
-            Debug.Log("Saved objects to: " + path);
-        }
-    }
-
-    private static void LoadDynamicObjects(string path, string sceneName)
-    {
-        SAVE_OBJECTS_PATH = path;
-
-        List<ObjectState> objectStates = ReadFile<List<ObjectState>>(path);
-
-        ObjectState.LoadObjects(mergedPrefabs, objectStates, GetRootDynamicObject(), sceneName);
-
-        
-        Debug.Log("Loaded objects from: " + path);
-    }
-
-    private static string IteratePath(string originalPath, string type, int i)
-    {
-        string path = originalPath;
-
-        GameObject player = GetPlayer();
-
-        if (player == null)
-        {
-            throw new InvalidOperationException("Cannot find the Player");
-        }
-        
-
-        if (type == "obj")
-        {
-            if (File.Exists(originalPath + ".inso") && SAVE_OBJECTS_PATH != originalPath + ".inso")
+            else if (type == "player")
             {
-                path = Application.dataPath + "/savegames/" + player.GetComponent<PlayerState>().name + "[" + i + "]" ;
-                i += 1;
-                path = IteratePath(path, type, i);
-                
+                if (File.Exists(originalPath + ".insp") && SAVE_PLAYER_PATH != originalPath + ".insp")
+                {
+                    path = Application.dataPath + "/savegames/" + player.GetComponent<CharacterState>().name + "[" + i + "]";
+                    i += 1;
+                    path = IteratePath(path, type, i);
+                }
+                else
+                {
+
+                    path += ".insp";
+                }
+
+                SAVE_PLAYER_PATH = path;
+                return path;
+
             }
-            else
-            {
-                path += ".inso";
-            }
-            SAVE_OBJECTS_PATH = path;
-            return path;
-
-        }
-        else if (type == "player")
-        {       
-            if (File.Exists(originalPath + ".insp") && SAVE_PLAYER_PATH != originalPath + ".insp")
-            {
-                path = Application.dataPath + "/savegames/" + player.GetComponent<PlayerState>().name + "[" + i + "]";
-                i += 1;
-                path = IteratePath(path, type, i);
-            }
-            else
-            {
-                
-                path += ".insp";
-            }
-
-            SAVE_PLAYER_PATH = path;
-            return path;
-
-        }
-        return null;
-    }
-
-    public static string[] GetSaves()
-    {
-        string[] saves = System.IO.Directory.GetFiles(Application.dataPath + "/savegames/");
-
-        return saves;
-    }
-    private static void WriteFile<T>(string path, T obj)
-    {
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream stream = new FileStream(path, FileMode.Create);
-
-        formatter.Serialize(stream, obj);
-        stream.Close();
-    }
-
-    private static T ReadFile<T>(string path)
-    {
-        BinaryFormatter formatter = new BinaryFormatter();
-        FileStream stream = new FileStream(path, FileMode.Open);
-
-        T objectState = (T)formatter.Deserialize(stream);
-
-        stream.Close();
-
-        return objectState;
-    }
-
-    public static float[] ConvertFromQuaternion(Quaternion quaternion)
-    {
-        float[] value = { quaternion.eulerAngles.x, quaternion.eulerAngles.y, quaternion.eulerAngles.z };
-
-        return value;
-    }
-    public static Quaternion ConvertToQuaternion(float[] value)
-    {
-        return Quaternion.Euler(value[0], value[1], value[2]);
-    }
-    public static float[] ConvertFromVector3(Vector3 vector3)
-    {
-        float[] values = { vector3.x, vector3.y, vector3.z };
-
-        return values;
-    }
-
-    public static Vector3 ConvertToVector3(float[] values)
-    {
-        return new Vector3(values[0], values[1], values[2]);
-    }
-
-    public static float[,] ConvertFromVector3Array(Vector3[] vector3)
-    {
-        if (vector3 == null)
-        {
-            return new float[0, 3];
-        }
-
-        float[,] values = new float[vector3.Length, 3];
-
-        for (int i = 0; i < vector3.Length; i++)
-        {
-            values[i, 0] = vector3[i].x;
-            values[i, 1] = vector3[i].y;
-            values[i, 2] = vector3[i].z;
-        }
-        return values;
-    }
-
-    public static Vector3[] ConvertToVector3Array(float[,] array)
-    {
-        if (array.Length == 0)
-        {
             return null;
         }
 
-        Vector3[] vector3 = new Vector3[array.GetUpperBound(0) + 1];
-        for (int i = 0; i < vector3.Length; i++)
+        public static string[] GetSaves()
         {
-            vector3[i] = new Vector3(array[i, 0], array[i, 1], array[i, 2]);
+            string[] saves = Directory.GetFiles(Application.dataPath + "/savegames/");
+
+            return saves;
         }
-        return vector3;
+        private static void WriteFile<T>(string path, T obj)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Create);
+
+            formatter.Serialize(stream, obj);
+            stream.Close();
+        }
+
+        private static T ReadFile<T>(string path)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            T objectState = (T)formatter.Deserialize(stream);
+
+            stream.Close();
+
+            return objectState;
+        }
+
+        public static float[] ConvertFromQuaternion(Quaternion quaternion)
+        {
+            float[] value = { quaternion.eulerAngles.x, quaternion.eulerAngles.y, quaternion.eulerAngles.z };
+
+            return value;
+        }
+        public static Quaternion ConvertToQuaternion(float[] value)
+        {
+            return Quaternion.Euler(value[0], value[1], value[2]);
+        }
+        public static float[] ConvertFromVector3(Vector3 vector3)
+        {
+            float[] values = { vector3.x, vector3.y, vector3.z };
+
+            return values;
+        }
+
+        public static Vector3 ConvertToVector3(float[] values)
+        {
+            return new Vector3(values[0], values[1], values[2]);
+        }
+
+        public static float[,] ConvertFromVector3Array(Vector3[] vector3)
+        {
+            if (vector3 == null)
+            {
+                return new float[0, 3];
+            }
+
+            float[,] values = new float[vector3.Length, 3];
+
+            for (int i = 0; i < vector3.Length; i++)
+            {
+                values[i, 0] = vector3[i].x;
+                values[i, 1] = vector3[i].y;
+                values[i, 2] = vector3[i].z;
+            }
+            return values;
+        }
+
+        public static Vector3[] ConvertToVector3Array(float[,] array)
+        {
+            if (array.Length == 0)
+            {
+                return null;
+            }
+
+            Vector3[] vector3 = new Vector3[array.GetUpperBound(0) + 1];
+            for (int i = 0; i < vector3.Length; i++)
+            {
+                vector3[i] = new Vector3(array[i, 0], array[i, 1], array[i, 2]);
+            }
+            return vector3;
+        }
     }
 }

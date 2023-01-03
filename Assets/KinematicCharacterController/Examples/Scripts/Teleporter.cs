@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using KinematicCharacterController.Examples;
+using Insolence.KinematicCharacterController;
 
-namespace KinematicCharacterController.Examples
+
+namespace KinematicCharacterController.Insolence
+    
 {
     public class Teleporter : MonoBehaviour
     {
         public Teleporter TeleportTo;
 
-        public UnityAction<ExampleCharacterController> OnCharacterTeleport;
+        public UnityAction<KineCharacterController> OnCharacterTeleport;
 
         public bool isBeingTeleportedTo { get; set; }
 
@@ -18,7 +20,7 @@ namespace KinematicCharacterController.Examples
         {
             if (!isBeingTeleportedTo)
             {
-                ExampleCharacterController cc = other.GetComponent<ExampleCharacterController>();
+                KineCharacterController cc = other.GetComponent<KineCharacterController>();
                 if (cc)
                 {
                     cc.Motor.SetPositionAndRotation(TeleportTo.transform.position, TeleportTo.transform.rotation);

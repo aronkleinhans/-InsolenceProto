@@ -62,6 +62,7 @@ public class PlayerCharacterCamera : MonoBehaviour
     {
         Transform = this.transform;
 
+        IgnoredColliders.Add(gameObject.GetComponentInParent<CapsuleCollider>());
         _currentDistance = DefaultDistance;
         TargetDistance = _currentDistance;
 

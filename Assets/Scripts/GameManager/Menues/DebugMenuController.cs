@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Insolence.core;
 
 public class DebugMenuController : MonoBehaviour
 {
@@ -30,6 +31,6 @@ public class DebugMenuController : MonoBehaviour
 
     public void debugLoad()
     {
-        loadScreen.SetActive(true);
+        SaveUtils.DoLoad(GameObject.Find("GameManager").GetComponent<GameManager>().playerPath, "", true, GameManager.GetCurrentSceneName());
     }
 }

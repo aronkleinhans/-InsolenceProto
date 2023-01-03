@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Insolence.core;
 
 public class MenuController : MonoBehaviour
 {
@@ -20,11 +21,11 @@ public class MenuController : MonoBehaviour
 
 
     //the start method here just starts a new game and hides the main menu (comment for menu testing)
-    private void Start()
-    {
-        GameObject.Find("MainMenuCanvas").SetActive(false);
-        NewGameDialogYes();
-    }
+    //private void Start()
+    //{
+    //    GameObject.Find("MainMenuCanvas").SetActive(false);
+    //    NewGameDialogYes();
+    //}
     public void NewGameDialogYes()
     {
         SceneManager.LoadScene(newGameLevel);

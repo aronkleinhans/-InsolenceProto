@@ -63,7 +63,6 @@ namespace KinematicCharacterController.Examples
         public float JumpPostGroundingGraceTime = 0f;
 
         [Header("Misc")]
-        public Animator pAnim;
         public List<Collider> IgnoredColliders = new List<Collider>();
         public BonusOrientationMethod BonusOrientationMethod = BonusOrientationMethod.None;
         public float BonusOrientationSharpness = 10f;
@@ -207,7 +206,6 @@ namespace KinematicCharacterController.Examples
         {
             _moveInputVector = inputs.MoveVector;
             _lookInputVector = inputs.LookVector;
-           
         }
 
         private Quaternion _tmpTransientRot;
@@ -289,9 +287,7 @@ namespace KinematicCharacterController.Examples
                         // Ground movement
                         if (Motor.GroundingStatus.IsStableOnGround)
                         {
-
                             float currentVelocityMagnitude = currentVelocity.magnitude;
-
 
                             Vector3 effectiveGroundNormal = Motor.GroundingStatus.GroundNormal;
 
@@ -305,24 +301,13 @@ namespace KinematicCharacterController.Examples
 
                             // Smooth movement Velocity
                             currentVelocity = Vector3.Lerp(currentVelocity, targetMovementVelocity, 1f - Mathf.Exp(-StableMovementSharpness * deltaTime));
-
-                            if (inputRight.magnitude > 0f)
-                            {
-                                pAnim.SetBool("isWalking", true);
-                            }
-                            if (Motor.GroundingStatus.IsStableOnGround == false || inputRight.magnitude == 0f) pAnim.SetBool("isWalking", false);
                         }
-                         
                         // Air movement
                         else
                         {
-                            pAnim.SetBool("isWalking", false);
                             // Add move input
                             if (_moveInputVector.sqrMagnitude > 0f)
                             {
-                                
-                                
-
                                 Vector3 addedVelocity = _moveInputVector * AirAccelerationSpeed * deltaTime;
 
                                 Vector3 currentVelocityOnInputsPlane = Vector3.ProjectOnPlane(currentVelocity, Motor.CharacterUp);
