@@ -124,17 +124,7 @@ namespace Insolence.KinematicCharacterController
             characterInputs.JumpDown = Input.GetKeyDown(KeyCode.Space);
             characterInputs.CrouchDown = Input.GetKeyDown(KeyCode.C);
             characterInputs.CrouchUp = Input.GetKeyUp(KeyCode.C);
-
-            Vector3 movement = new Vector3(characterInputs.MoveAxisRight, 0, characterInputs.MoveAxisForward).normalized;
-
-            //rotate character towards input direction
-            targetAngle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg + OrbitCamera.transform.eulerAngles.y;
-            currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, rotationSmoothTime);
-            transform.rotation = Quaternion.Euler(0, currentAngle, 0);
-            rotatedMovement = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
-
-            //handle dash
-
+            characterInputs.DashDown = Input.GetKeyDown(KeyCode.LeftShift);
 
             // Apply inputs to character
             Character.SetInputs(ref characterInputs);

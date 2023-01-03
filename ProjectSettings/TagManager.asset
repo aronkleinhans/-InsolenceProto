@@ -8,6 +8,8 @@ TagManager:
   - DynamicRoot
   - GameManager
   - portal
+  - Resource
+  - NPC
   layers:
   - Default
   - TransparentFX

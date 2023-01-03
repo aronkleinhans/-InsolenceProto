@@ -2,6 +2,7 @@ using Insolence.core;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using KinematicCharacterController;
 
 [Serializable]
 public class ObjectState
@@ -170,8 +171,17 @@ public class ObjectState
 
                 Vector3 position = SaveUtils.ConvertToVector3(objectState.position);
                 Quaternion rotation = SaveUtils.ConvertToQuaternion(objectState.rotation);
-                createdObject.transform.position = position;
-                createdObject.transform.rotation = rotation;
+                if (createdObject.tag == "NPC")
+                {
+                    createdObject.GetComponent<KinematicCharacterMotor>().SetPositionAndRotation(position, rotation);
+                }
+                else
+                {
+                    createdObject.transform.position = position;
+                    createdObject.transform.rotation = rotation;
+                }
+
+
 
                 createdObject.transform.SetParent(rootObject.transform);
                 // Save the object into the dictionary

@@ -8,7 +8,9 @@ namespace Insolence.core
         [Header("Player Stats")]
         [SerializeField] public int level = 1;
         [SerializeField] public int health = 50;
-        [SerializeField] public new string name = "Bob";
+        [SerializeField] public int maxStamina = 100;
+        [SerializeField] public int currentStamina = 100;
+        [SerializeField] public new string name = "";
 
 
         [SerializeField] public string currentScene;
@@ -29,6 +31,8 @@ namespace Insolence.core
         {
             objectState.genericValues[name + "Stats.level"] = level;
             objectState.genericValues[name + "Stats.health"] = health;
+            objectState.genericValues[name + "Stats.maxStamina"] = maxStamina;
+            objectState.genericValues[name + "Stats.currentStamina"] = currentStamina;
             objectState.genericValues[name + "Stats.name"] = name;
             objectState.genericValues["savedLevel"] = currentScene;
         }
@@ -40,6 +44,8 @@ namespace Insolence.core
             // Load the reference to the stats
             level = Convert.ToInt32(objectState.genericValues[name + "Stats.level"]);
             health = Convert.ToInt32(objectState.genericValues[name + "Stats.health"]);
+            maxStamina = Convert.ToInt32(objectState.genericValues[name + "Stats.maxStamina"]);
+            currentStamina = Convert.ToInt32(objectState.genericValues[name + "Stats.currentStamina"]);
             name = Convert.ToString(objectState.genericValues[name + "Stats.name"]);
             currentScene = Convert.ToString(objectState.genericValues["savedLevel"]);
 

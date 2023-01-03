@@ -25,6 +25,7 @@ namespace Insolence.KinematicCharacterController
         public bool JumpDown;
         public bool CrouchDown;
         public bool CrouchUp;
+        public bool DashDown;
     }
 
     public struct AICharacterInputs
