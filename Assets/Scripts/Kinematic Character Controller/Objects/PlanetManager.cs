@@ -24,11 +24,11 @@ namespace Insolence.KinematicCharacterController
 
         private void Start()
         {
-            //onplaygroundteleportingzone.oncharacterteleport -= controlgravity;
-            //onplaygroundteleportingzone.oncharacterteleport += controlgravity;
+            OnPlaygroundTeleportingZone.OnCharacterTeleport -= ControlGravity;
+            OnPlaygroundTeleportingZone.OnCharacterTeleport += ControlGravity;
 
-            //onplanetteleportingzone.oncharacterteleport -= uncontrolgravity;
-            //onplanetteleportingzone.oncharacterteleport += uncontrolgravity;
+            OnPlanetTeleportingZone.OnCharacterTeleport -= UnControlGravity;
+            OnPlanetTeleportingZone.OnCharacterTeleport += UnControlGravity;
 
             _lastRotation = PlanetMover.transform.rotation;
 

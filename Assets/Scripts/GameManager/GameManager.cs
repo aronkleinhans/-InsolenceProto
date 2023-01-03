@@ -25,10 +25,7 @@ namespace Insolence.core
             playerInfo = gameObject.GetComponent<PlayerInfo>();
             playerInfo.GetPlayerInfo();
 
-            if (SceneManager.GetActiveScene().name != sceneName)
-            {
-                SceneManager.LoadScene(sceneName);
-            }
+            SceneManager.LoadScene(sceneName);
 
             StartCoroutine(waitForSceneLoad("", "", sceneName, spawn));
         }
