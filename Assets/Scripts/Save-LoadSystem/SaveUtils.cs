@@ -22,8 +22,8 @@ namespace Insolence.core
         public static Dictionary<string, GameObject> mergedPrefabs = mergeDictionaries(prefabCollection);
 
 
-        public static string SAVE_OBJECTS_PATH = Application.dataPath + "/savegames/default.inso";
-        public static string SAVE_PLAYER_PATH = Application.dataPath + "/savegames/default.insp";
+        public static string SAVE_OBJECTS_PATH = Application.persistentDataPath + "/savegames/default.inso";
+        public static string SAVE_PLAYER_PATH = Application.persistentDataPath + "/savegames/default.insp";
 
         private static Dictionary<string, GameObject> mergeDictionaries(Dictionary<string, GameObject>[] dictionaries)
         {
@@ -126,7 +126,13 @@ namespace Insolence.core
             {
                 throw new InvalidOperationException("Cannot find the Player");
             }
-            path = Application.dataPath + "/savegames/" + player.GetComponent<CharacterState>().name;
+            //check if path exists if not create folder
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Debug.Log("Creating save folder");
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            }
+            path = Application.persistentDataPath + "/savegames/" + player.GetComponent<CharacterState>().name;
 
             path = IteratePath(path, "player", 1);
 
@@ -184,7 +190,7 @@ namespace Insolence.core
             {
                 throw new InvalidOperationException("Cannot find the Player");
             }
-            path = Application.dataPath + "/savegames/" + player.GetComponent<CharacterState>().name;
+            path = Application.persistentDataPath + "/savegames/" + player.GetComponent<CharacterState>().name;
 
             path = IteratePath(path, "obj", 1);
 
@@ -247,7 +253,7 @@ namespace Insolence.core
             {
                 if (File.Exists(originalPath + ".inso") && SAVE_OBJECTS_PATH != originalPath + ".inso")
                 {
-                    path = Application.dataPath + "/savegames/" + player.GetComponent<CharacterState>().name + "[" + i + "]";
+                    path = Application.persistentDataPath + "/savegames/" + player.GetComponent<CharacterState>().name + "[" + i + "]";
                     i += 1;
                     path = IteratePath(path, type, i);
 
@@ -264,7 +270,7 @@ namespace Insolence.core
             {
                 if (File.Exists(originalPath + ".insp") && SAVE_PLAYER_PATH != originalPath + ".insp")
                 {
-                    path = Application.dataPath + "/savegames/" + player.GetComponent<CharacterState>().name + "[" + i + "]";
+                    path = Application.persistentDataPath + "/savegames/" + player.GetComponent<CharacterState>().name + "[" + i + "]";
                     i += 1;
                     path = IteratePath(path, type, i);
                 }
@@ -283,7 +289,7 @@ namespace Insolence.core
 
         public static string[] GetSaves()
         {
-            string[] saves = Directory.GetFiles(Application.dataPath + "/savegames/");
+            string[] saves = Directory.GetFiles(Application.persistentDataPath + "/savegames/");
 
             return saves;
         }
