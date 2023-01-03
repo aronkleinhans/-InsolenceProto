@@ -10,15 +10,10 @@ namespace Insolence.KinematicCharacterController.AI
 {
     public class NpcKinematicController : MonoBehaviour
     {
-        public float wanderRadius;
-        public float wanderTimer;
-
-        public float MovementPeriod = 1f;
         public KineCharacterController character;
         
         private Transform target;
         private NavMeshAgent agent;
-        private float timer;
 
         // Use this for initialization
         void OnEnable()
