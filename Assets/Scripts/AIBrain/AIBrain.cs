@@ -23,14 +23,44 @@ namespace Insolence.AIBrain
         {
 
         }
-        public void ScoreAction(Action action)
+        public float ScoreAction(Action action)
         {
             //score the action based on the current state of the world and the NPC
+            float score = 1f;
+            for (int i = 0; i < action.considerations.Length; i++)
+            {
+                float considerationScore = action.considerations[i].ScoreConsideration();
+                score *= considerationScore;
+
+                if (score == 0)
+                {
+                    action.score = 0;
+                    return action.score; //no point computing further if score hits 0
+                }
+            }
+            //averaging scheme of overall score (by Dave Mark & friend :D)
+            float originalScore = score;
+            float modFactor = 1 - (1 / action.considerations.Length);
+            float makeupValue = (1 - originalScore) * modFactor;
+            action.score = originalScore + (originalScore * makeupValue);
+            return action.score;
         }
 
         public void ChooseBestAction(Action[] actions)
         {
             //choose the best action from the list of available actions
+            float bestScore = 0;
+            int nextBestActionIndex = 0;
+            for (int i = 0; i < actions.Length; i++)
+            {
+                float score = ScoreAction(actions[i]);
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    nextBestActionIndex = i;
+                }
+            }
+            bestAction = actions[nextBestActionIndex];
         }
     }
 }

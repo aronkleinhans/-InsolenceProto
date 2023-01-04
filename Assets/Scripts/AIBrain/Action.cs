@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Insolence.core;
 
 namespace Insolence.AIBrain
 {
-    [CreateAssetMenu(fileName = "New Action", menuName = "InsolenceAI/Action")]
     public abstract class Action : ScriptableObject
     {
         [SerializeField]private string name;
@@ -23,10 +23,9 @@ namespace Insolence.AIBrain
 
         public virtual void Awake()
         {
-            score = 0;
-            
+            score = 0;  
         }
 
-        public abstract void Execute();
+        public abstract void Execute(NPCAIController npc);
     }
 }

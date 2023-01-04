@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Insolence.AIBrain
 {   
-    [CreateAssetMenu(fileName = "New Consideration", menuName = "InsolenceAI/Consideration")]
     public abstract class Consideration : ScriptableObject
     {
         public string name;
@@ -22,6 +21,6 @@ namespace Insolence.AIBrain
         {
             score = 0;
         }
-        public abstract void ScoreConsideration();
+        public abstract float ScoreConsideration();
     }
 }
