@@ -7,7 +7,8 @@ namespace Insolence.core
     {
         [Header("Player Stats")]
         [SerializeField] public int level = 1;
-        [SerializeField] public int health = 50;
+        [SerializeField] public int maxHealth = 50;
+        [SerializeField] public int currentHealth = 50;
         [SerializeField] public int maxStamina = 100;
         [SerializeField] public int currentStamina = 100;
         [SerializeField] public new string name = "";
@@ -30,7 +31,8 @@ namespace Insolence.core
         private void PrepareToSaveObjectState(ObjectState objectState)
         {
             objectState.genericValues[name + "Stats.level"] = level;
-            objectState.genericValues[name + "Stats.health"] = health;
+            objectState.genericValues[name + "Stats.health"] = maxHealth;
+            objectState.genericValues[name + "Stats.currentHealth"] = currentHealth;
             objectState.genericValues[name + "Stats.maxStamina"] = maxStamina;
             objectState.genericValues[name + "Stats.currentStamina"] = currentStamina;
             objectState.genericValues[name + "Stats.name"] = name;
@@ -43,7 +45,8 @@ namespace Insolence.core
             transform.rotation = SaveUtils.ConvertToQuaternion(objectState.rotation);
             // Load the reference to the stats
             level = Convert.ToInt32(objectState.genericValues[name + "Stats.level"]);
-            health = Convert.ToInt32(objectState.genericValues[name + "Stats.health"]);
+            maxHealth = Convert.ToInt32(objectState.genericValues[name + "Stats.health"]);
+            currentHealth = Convert.ToInt32(objectState.genericValues[name + "Stats.currentHealth"]);
             maxStamina = Convert.ToInt32(objectState.genericValues[name + "Stats.maxStamina"]);
             currentStamina = Convert.ToInt32(objectState.genericValues[name + "Stats.currentStamina"]);
             name = Convert.ToString(objectState.genericValues[name + "Stats.name"]);

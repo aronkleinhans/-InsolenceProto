@@ -9,7 +9,10 @@ namespace Insolence.core
         [Header("Player Stats")]
         [SerializeField] string playerName;
         [SerializeField] int level;
-        [SerializeField] int health;
+        [SerializeField] int maxHealth;
+        [SerializeField] int currentHealth;
+        [SerializeField] int maxStamina;
+        [SerializeField] int currentStamina;
 
         public Vector3 playerPosition;
         public CharacterState currentState;
@@ -27,7 +30,10 @@ namespace Insolence.core
 
             playerName = currentState.name;
             level = currentState.level;
-            health = currentState.health;
+            maxHealth = currentState.maxHealth;
+            currentHealth = currentState.currentHealth;
+            maxStamina = currentState.maxStamina;
+            currentStamina = currentState.currentStamina;
         }
         public void UpdateCharacterState(GameObject player)
         {
@@ -35,7 +41,10 @@ namespace Insolence.core
             currentState = player.GetComponent<CharacterState>();
 
             currentState.level = level;
-            currentState.health = health;
+            currentState.maxHealth = maxHealth;
+            currentState.currentHealth = currentHealth;
+            currentState.maxStamina = maxStamina;
+            currentState.currentStamina = currentStamina;
             currentState.name = playerName;
         }
     }

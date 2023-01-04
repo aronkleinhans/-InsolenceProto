@@ -14,9 +14,11 @@ GameObject:
   - component: {fileID: 7816020604320155259}
   - component: {fileID: 4520712414398784053}
   - component: {fileID: 4855265357433648567}
-  - component: {fileID: 2601593861060040940}
   - component: {fileID: 532336428261784888}
+  - component: {fileID: 2601593861060040940}
   - component: {fileID: 2432330404798905283}
+  - component: {fileID: 3032192031084570150}
+  - component: {fileID: 6983068585820557565}
   m_Layer: 0
   m_Name: FriendlyNpc
   m_TagString: NPC
@@ -173,22 +175,6 @@ MonoBehaviour:
     isPrefab: 1
     prefabGuid: 10ec9f37-9a51-4009-b595-a474a8d74311
     childrenGuids: []
---- !u!114 &2601593861060040940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7816020604320155253}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de5c14e86defad34c882ebb55ccd6f09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wanderRadius: 10
-  wanderTimer: 1
-  MovementPeriod: 1
-  character: {fileID: 0}
 --- !u!195 &532336428261784888
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -211,6 +197,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &2601593861060040940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7816020604320155253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5c14e86defad34c882ebb55ccd6f09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 0}
 --- !u!114 &2432330404798905283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,9 +223,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 1
-  health: 20
+  maxHealth: 50
+  currentHealth: 50
+  maxStamina: 100
+  currentStamina: 100
   name: Jeb
   currentScene: 
+--- !u!114 &3032192031084570150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7816020604320155253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cbabeb9c755dbe4da59a2e39f5ecb89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableActions: []
+--- !u!114 &6983068585820557565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7816020604320155253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f1dea24856c4c4da831039e92fc2c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7816020605056101603
 GameObject:
   m_ObjectHideFlags: 0
