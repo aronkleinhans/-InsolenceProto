@@ -33,8 +33,9 @@ namespace Insolence.AIBrain
         {
             brain.ChooseBestAction(availableActions);
         }
-        #region Coroutine
         
+        #region Coroutines
+
         public void DoWork(int time, string name)
         {
             Debug.Log("Doing work");
@@ -57,13 +58,12 @@ namespace Insolence.AIBrain
             {
                 yield return new WaitForSeconds(1);
                 counter--;
-                
+
             }
             //logic to update things involved with work
             Debug.Log(name + " done gathered x resource!");
             //decide new best action 
             OnFinishedAction();
-            
         }
         private IEnumerator SleepCoroutine(int time)
         {

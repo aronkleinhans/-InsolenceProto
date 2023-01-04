@@ -1,76 +1,73 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+using Insolence.UI;
 
-
-public class PlayerInteraction : MonoBehaviour
+namespace Insolence.core
 {
-    [Header("Interactables")]
-    [SerializeField] Canvas uiCanvas;
-    [SerializeField] GameObject targetInteractable;
+    public class PlayerInteraction : MonoBehaviour
+    {
+        [Header("Interactables")]
+        [SerializeField] GameObject targetInteractable;
+        [SerializeField] InGameUIController uiControl;
 
-    private void Start()
-    {
-        uiCanvas = GameObject.Find("PopUpCanvas").GetComponent<Canvas>();
-    }
-    void Update()
-    {
-        HandleInteraction();
-    }
-    private void HandleInteraction()
-    {
-        if (targetInteractable != null)
+        private void Start()
         {
-            PopUp();
-
-            if (Input.GetButtonDown("Interact"))
+            uiControl = GameObject.Find("InGameUI").GetComponent<InGameUIController>();
+        }
+        void FixedUpdate()
+        {
+            HandleInteraction();
+        }
+        private void HandleInteraction()
+        {
+            if (targetInteractable != null)
             {
-                if (targetInteractable)
+                uiControl.InteractPopUp(targetInteractable);
+
+                if (Input.GetButtonDown("Interact"))
                 {
-                    Debug.Log("Interacting.");
+                    if (targetInteractable)
+                    {
+                        Debug.Log("Interacting.");
 
-                    targetInteractable.GetComponent<Interactable>().Interaction(transform);
+                        targetInteractable.GetComponent<Interactable>().Interaction(transform);
+                    }
+                    else Debug.Log("can't interact");
                 }
-                else Debug.Log("can't interact");
+
             }
+            else
+                uiControl.closeInteractPopUp();
 
         }
-        else uiCanvas.enabled = false;
 
-    }
-    private void PopUp()
-    {
-        uiCanvas.enabled = true;
-        uiCanvas.GetComponentInChildren<TextMeshProUGUI>().text = "[F] " + targetInteractable.GetComponent<Interactable>().interactionType;
-        uiCanvas.GetComponentInChildren<TextMeshProUGUI>().text += " " + targetInteractable.GetComponent<Interactable>().interactableName;
-    }   
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Interactable")
-        {
-            targetInteractable = other.gameObject;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Interactable" && other.gameObject.name == targetInteractable.name)
-        {
-            targetInteractable = null;
-        }
-    }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (targetInteractable == null)
+        private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.tag == "Interactable")
             {
                 targetInteractable = other.gameObject;
             }
         }
-    }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.gameObject.tag == "Interactable" && other.gameObject.name == targetInteractable.name)
+            {
+                targetInteractable = null;
+            }
+        }
 
+        private void OnTriggerStay(Collider other)
+        {
+            if (targetInteractable == null)
+            {
+                if (other.gameObject.tag == "Interactable")
+                {
+                    targetInteractable = other.gameObject;
+                }
+            }
+        }
+
+    }
 }
