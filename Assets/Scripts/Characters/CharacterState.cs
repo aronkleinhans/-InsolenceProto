@@ -12,6 +12,7 @@ namespace Insolence.core
         [SerializeField] public int maxStamina = 100;
         [SerializeField] public int currentStamina = 100;
         [SerializeField] public int hunger = 0;
+        [SerializeField] public int money = 0;
         [SerializeField] public new string name = "";
 
 
@@ -36,6 +37,8 @@ namespace Insolence.core
             objectState.genericValues[name + "Stats.currentHealth"] = currentHealth;
             objectState.genericValues[name + "Stats.maxStamina"] = maxStamina;
             objectState.genericValues[name + "Stats.currentStamina"] = currentStamina;
+            objectState.genericValues[name + "Stats.hunger"] = hunger;
+            objectState.genericValues[name + "Stats.money"] = money;
             objectState.genericValues[name + "Stats.name"] = name;
             objectState.genericValues["savedLevel"] = currentScene;
         }
@@ -50,6 +53,8 @@ namespace Insolence.core
             currentHealth = Convert.ToInt32(objectState.genericValues[name + "Stats.currentHealth"]);
             maxStamina = Convert.ToInt32(objectState.genericValues[name + "Stats.maxStamina"]);
             currentStamina = Convert.ToInt32(objectState.genericValues[name + "Stats.currentStamina"]);
+            hunger = Convert.ToInt32(objectState.genericValues[name + "Stats.hunger"]);
+            money = Convert.ToInt32(objectState.genericValues[name + "Stats.money"]);
             name = Convert.ToString(objectState.genericValues[name + "Stats.name"]);
             currentScene = Convert.ToString(objectState.genericValues["savedLevel"]);
 

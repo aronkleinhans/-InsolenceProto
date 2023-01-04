@@ -20,8 +20,16 @@ namespace Insolence.AIBrain
 
         public void Update()
         {
-            
+            if (brain.finishedDeciding) 
+            { 
+                if (brain.bestAction != null)
+                {
+                    brain.bestAction.Execute(this);
+                    brain.finishedDeciding = false;
+                }
+            }
         }
+        
         #region Coroutine
         
         public void DoWork(int time, string name)
@@ -46,9 +54,9 @@ namespace Insolence.AIBrain
             {
                 yield return new WaitForSeconds(1);
                 counter--;
-                Debug.Log(name + " done gathered x resource!");
                 //logic to update things involved with work
             }
+            Debug.Log(name + " done gathered x resource!");
         }
         private IEnumerator SleepCoroutine(int time)
         {
@@ -57,9 +65,9 @@ namespace Insolence.AIBrain
             {
                 yield return new WaitForSeconds(1);
                 counter--;
-                Debug.Log("Sleep done regenerated x maxStamina!");
-                //logic update max stamina
+                //logic to update max stamina
             }
+            Debug.Log("Sleep done regenerated x maxStamina!");
         }
         private IEnumerator EatCoroutine(int time)
         {
@@ -68,10 +76,10 @@ namespace Insolence.AIBrain
             {
                 yield return new WaitForSeconds(1);
                 this.gameObject.GetComponent<CharacterState>().hunger -= 1;
-                Debug.Log("Eating done regenerated x maxHealth!");
                 //determine hunger regen based on food type etc
-                //logic update max health
+                //logic to update max health
             }
+            Debug.Log("Eating done regenerated x health, x maxStamina and x hunger!");
         }
 
         #endregion

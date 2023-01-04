@@ -9,6 +9,8 @@ namespace Insolence.AIBrain
         //AIBrain is responsible for scoring a list of Actions and choosing the best one to perform and puts it out for all other scripst to perform that Action
         //AIBrain is also responsible for updating the Action's score based on the current state of the world and the NPC
         public Action bestAction { get; set; }
+        public bool finishedDeciding { get; set; }
+
         private NPCAIController npc;
 
 
@@ -21,7 +23,10 @@ namespace Insolence.AIBrain
         // Update is called once per frame
         void Update()
         {
-
+            if (bestAction == null)
+            {
+                ChooseBestAction(npc.availableActions);
+            }
         }
         public float ScoreAction(Action action)
         {
@@ -61,6 +66,7 @@ namespace Insolence.AIBrain
                 }
             }
             bestAction = actions[nextBestActionIndex];
+            finishedDeciding = true;
         }
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Insolence.AIBrain.Actions
 {
-    [CreateAssetMenu(fileName = "Eat", menuName = "Insolence/AI/Actions/Eat", order = 3)]
+    [CreateAssetMenu(fileName = "Eat", menuName = "Insolence/AIBrain/Actions/Eat", order = 3)]
 
     public class Eat : Action
     {

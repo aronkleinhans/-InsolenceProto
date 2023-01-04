@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03d1d49009bcf99438e00e0b28737d20, type: 3}
-  m_Name: WoodCutting
+  m_Script: {fileID: 11500000, guid: e9a0fd688754c404882e1114a24a8859, type: 3}
+  m_Name: Hunger
   m_EditorClassIdentifier: 
-  name: 
-  considerations: []
+  name: Hunger
