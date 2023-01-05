@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KinematicCharacterController.Examples
+namespace Insolence.KinematicCharacterController.Examples
 {
     public class ExampleMovingPlatform : MonoBehaviour, IMoverController
     {

@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.ClimbingLadders
+namespace Insolence.KinematicCharacterController.Walkthrough.ClimbingLadders
 {
     public class MyPlayer : MonoBehaviour
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 
-namespace KinematicCharacterController.Walkthrough.Crouching
+namespace Insolence.KinematicCharacterController.Walkthrough.Crouching
 {
     public class MyPlayer : MonoBehaviour
     {

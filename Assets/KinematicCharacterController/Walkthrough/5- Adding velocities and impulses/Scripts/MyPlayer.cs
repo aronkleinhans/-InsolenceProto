@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 
-namespace KinematicCharacterController.Walkthrough.AddingImpulses
+namespace Insolence.KinematicCharacterController.Walkthrough.AddingImpulses
 {
     public class MyPlayer : MonoBehaviour
     {

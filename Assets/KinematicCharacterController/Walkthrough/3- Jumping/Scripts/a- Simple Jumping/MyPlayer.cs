@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.SimpleJumping
+namespace Insolence.KinematicCharacterController.Walkthrough.SimpleJumping
 {
     public class MyPlayer : MonoBehaviour
     {

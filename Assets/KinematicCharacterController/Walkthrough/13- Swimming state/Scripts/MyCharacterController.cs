@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.SwimmingState
+namespace Insolence.KinematicCharacterController.Walkthrough.SwimmingState
 {
     public enum CharacterState
     {

@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.PlayerCameraCharacterSetup
+namespace Insolence.KinematicCharacterController.Walkthrough.PlayerCameraCharacterSetup
 {
     public class MyCharacterController : MonoBehaviour, ICharacterController
     {

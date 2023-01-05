@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.CollisionFiltering
+namespace Insolence.KinematicCharacterController.Walkthrough.CollisionFiltering
 {
     public class MyPlayer : MonoBehaviour
     {

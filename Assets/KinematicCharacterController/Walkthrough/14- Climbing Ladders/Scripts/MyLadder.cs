@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KinematicCharacterController.Walkthrough.ClimbingLadders
+namespace Insolence.KinematicCharacterController.Walkthrough.ClimbingLadders
 {
     public class MyLadder : MonoBehaviour
     {

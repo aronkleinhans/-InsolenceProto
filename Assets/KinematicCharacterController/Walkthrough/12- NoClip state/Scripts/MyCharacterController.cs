@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.NoClipState
+namespace Insolence.KinematicCharacterController.Walkthrough.NoClipState
 {
     public enum CharacterState
     {

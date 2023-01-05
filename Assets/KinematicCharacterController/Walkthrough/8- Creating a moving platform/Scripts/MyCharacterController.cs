@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.MovingPlatform
+namespace Insolence.KinematicCharacterController.Walkthrough.MovingPlatform
 {
     public struct PlayerCharacterInputs
     {

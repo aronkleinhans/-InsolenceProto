@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.LandingLeavingGround
+namespace Insolence.KinematicCharacterController.Walkthrough.LandingLeavingGround
 {
     public struct PlayerCharacterInputs
     {

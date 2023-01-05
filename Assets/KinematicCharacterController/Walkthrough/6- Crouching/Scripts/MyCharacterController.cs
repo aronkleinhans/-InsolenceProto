@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.Crouching
+namespace Insolence.KinematicCharacterController.Walkthrough.Crouching
 {
     public struct PlayerCharacterInputs
     {

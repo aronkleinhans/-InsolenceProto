@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 
-namespace KinematicCharacterController.Walkthrough.WallJumping
+namespace Insolence.KinematicCharacterController.Walkthrough.WallJumping
 {
     public class MyPlayer : MonoBehaviour
     {

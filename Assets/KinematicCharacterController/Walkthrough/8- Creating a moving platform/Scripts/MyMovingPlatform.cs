@@ -5,7 +5,7 @@ using UnityEngine;
 using System;
 using UnityEngine.Playables;
 
-namespace KinematicCharacterController.Walkthrough.MovingPlatform
+namespace Insolence.KinematicCharacterController.Walkthrough.MovingPlatform
 {
     public struct MyMovingPlatformState
     {

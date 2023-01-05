@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.ChargingState
+namespace Insolence.KinematicCharacterController.Walkthrough.ChargingState
 {
     public enum CharacterState
     {

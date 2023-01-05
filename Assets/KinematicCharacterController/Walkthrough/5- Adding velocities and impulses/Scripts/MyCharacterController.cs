@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.AddingImpulses
+namespace Insolence.KinematicCharacterController.Walkthrough.AddingImpulses
 {
     public struct PlayerCharacterInputs
     {

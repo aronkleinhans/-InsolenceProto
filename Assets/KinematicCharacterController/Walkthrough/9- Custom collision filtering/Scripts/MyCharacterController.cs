@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.CollisionFiltering
+namespace Insolence.KinematicCharacterController.Walkthrough.CollisionFiltering
 {
     public struct PlayerCharacterInputs
     {

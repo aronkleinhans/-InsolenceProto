@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using KinematicCharacterController;
+using Insolence.KinematicCharacterController;
 
 public class PauseStateHandler
 {

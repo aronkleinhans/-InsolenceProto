@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using KinematicCharacterController;
+using Insolence.KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.ClimbingLadders
+namespace Insolence.KinematicCharacterController.Walkthrough.ClimbingLadders
 {
     public enum CharacterState
     {

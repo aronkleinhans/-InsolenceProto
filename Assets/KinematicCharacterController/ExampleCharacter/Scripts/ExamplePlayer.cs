@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 
-namespace KinematicCharacterController.Examples
+namespace Insolence.KinematicCharacterController.Examples
 {
     public class ExamplePlayer : MonoBehaviour
     {

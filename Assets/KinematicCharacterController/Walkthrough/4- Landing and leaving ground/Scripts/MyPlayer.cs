@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 
-namespace KinematicCharacterController.Walkthrough.LandingLeavingGround
+namespace Insolence.KinematicCharacterController.Walkthrough.LandingLeavingGround
 {
     public class MyPlayer : MonoBehaviour
     {

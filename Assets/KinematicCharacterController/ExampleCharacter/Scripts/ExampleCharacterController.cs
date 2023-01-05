@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Examples
+namespace Insolence.KinematicCharacterController.Examples
 {
     public enum CharacterState
     {

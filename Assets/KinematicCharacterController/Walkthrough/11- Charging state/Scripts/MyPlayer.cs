@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.ChargingState
+namespace Insolence.KinematicCharacterController.Walkthrough.ChargingState
 {
     public class MyPlayer : MonoBehaviour
     {

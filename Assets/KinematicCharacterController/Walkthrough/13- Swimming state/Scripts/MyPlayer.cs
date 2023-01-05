@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.SwimmingState
+namespace Insolence.KinematicCharacterController.Walkthrough.SwimmingState
 {
     public class MyPlayer : MonoBehaviour
     {

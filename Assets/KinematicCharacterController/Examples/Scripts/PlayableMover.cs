@@ -5,7 +5,7 @@ using UnityEngine;
 using System;
 using UnityEngine.Playables;
 
-namespace KinematicCharacterController.Examples
+namespace Insolence.KinematicCharacterController.Examples
 {
     public class PlayableMover : MonoBehaviour, IMoverController
     {

@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.PlayerCameraCharacterSetup
+namespace Insolence.KinematicCharacterController.Walkthrough.PlayerCameraCharacterSetup
 {
     public class MyPlayer : MonoBehaviour
     {

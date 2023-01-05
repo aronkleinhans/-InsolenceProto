@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.RootMotionExample
+namespace Insolence.KinematicCharacterController.Walkthrough.RootMotionExample
 {
     public struct PlayerCharacterInputs
     {

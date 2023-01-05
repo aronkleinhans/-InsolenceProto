@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace KinematicCharacterController.Examples
+namespace Insolence.KinematicCharacterController.Examples
 {
     public class StressTestManager : MonoBehaviour
     {

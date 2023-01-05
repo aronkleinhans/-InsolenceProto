@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.MultipleMovementStates
+namespace Insolence.KinematicCharacterController.Walkthrough.MultipleMovementStates
 {
     public enum CharacterState
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.WallJumping
+namespace Insolence.KinematicCharacterController.Walkthrough.WallJumping
 {
     public struct PlayerCharacterInputs
     {

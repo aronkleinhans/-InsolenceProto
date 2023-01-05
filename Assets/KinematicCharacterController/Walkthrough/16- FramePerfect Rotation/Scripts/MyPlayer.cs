@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.FramePerfectRotation
+namespace Insolence.KinematicCharacterController.Walkthrough.FramePerfectRotation
 {
     public class MyPlayer : MonoBehaviour
     {

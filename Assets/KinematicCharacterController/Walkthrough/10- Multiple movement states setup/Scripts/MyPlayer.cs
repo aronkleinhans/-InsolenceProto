@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.MultipleMovementStates
+namespace Insolence.KinematicCharacterController.Walkthrough.MultipleMovementStates
 {
     public class MyPlayer : MonoBehaviour
     {

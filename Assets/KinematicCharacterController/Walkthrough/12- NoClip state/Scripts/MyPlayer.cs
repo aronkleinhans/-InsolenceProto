@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.NoClipState
+namespace Insolence.KinematicCharacterController.Walkthrough.NoClipState
 {
     public class MyPlayer : MonoBehaviour
     {

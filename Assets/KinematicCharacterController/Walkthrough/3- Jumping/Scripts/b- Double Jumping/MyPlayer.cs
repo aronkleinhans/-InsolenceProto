@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 
-namespace KinematicCharacterController.Walkthrough.DoubleJumping
+namespace Insolence.KinematicCharacterController.Walkthrough.DoubleJumping
 {
     public class MyPlayer : MonoBehaviour
     {

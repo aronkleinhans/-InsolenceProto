@@ -5,7 +5,7 @@ using KinematicCharacterController;
 using KinematicCharacterController.Examples;
 using System.Linq;
 
-namespace KinematicCharacterController.Walkthrough.OrientingArbitraryDirection
+namespace Insolence.KinematicCharacterController.Walkthrough.OrientingArbitraryDirection
 {
     public class MyPlayer : MonoBehaviour
     {

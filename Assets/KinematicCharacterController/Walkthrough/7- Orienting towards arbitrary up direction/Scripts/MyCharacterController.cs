@@ -4,7 +4,7 @@ using UnityEngine;
 using KinematicCharacterController;
 using System;
 
-namespace KinematicCharacterController.Walkthrough.OrientingArbitraryDirection
+namespace Insolence.KinematicCharacterController.Walkthrough.OrientingArbitraryDirection
 {
     public struct PlayerCharacterInputs
     {
