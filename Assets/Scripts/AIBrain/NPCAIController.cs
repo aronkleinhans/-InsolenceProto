@@ -11,6 +11,7 @@ namespace Insolence.AIBrain
         public NpcKinematicController mover { get; set; }
         public AIBrain brain { get; set; }
         public Action[] availableActions;
+        public GameObject targetInteractable;
 
         public void Start()
         {
@@ -33,7 +34,24 @@ namespace Insolence.AIBrain
         {
             brain.ChooseBestAction(availableActions);
         }
-        
+
+        public bool GetInteractable()
+        {
+            return targetInteractable != null;
+        }
+
+        public void DoInteract()
+        {
+            if (targetInteractable)
+            {
+                Debug.Log(gameObject.name + " is Interacting.");
+
+                targetInteractable.GetComponent<Interactable>().Interaction(transform);
+                OnFinishedAction();
+            }
+            
+        }
+
         #region Coroutines
 
         public void DoWork(int time, string name)
@@ -51,6 +69,7 @@ namespace Insolence.AIBrain
             Debug.Log("Eating");
             StartCoroutine(EatCoroutine(time));
         }
+
         private IEnumerator WorkCoroutine(int time, string name)
         {
             int counter = time;
@@ -94,5 +113,35 @@ namespace Insolence.AIBrain
         }
 
         #endregion
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.tag == "Interactable")
+            {
+                Debug.Log("Interactable detected");
+                //get interactable
+                targetInteractable = other.gameObject;
+
+            }
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.gameObject.tag == "Interactable" && other.gameObject.name == targetInteractable.name)
+            {
+                targetInteractable = null;
+            }
+            OnFinishedAction();
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (targetInteractable == null)
+            {
+                if (other.gameObject.tag == "Interactable")
+                {
+                    targetInteractable = other.gameObject;
+                }
+            }
+        }
     }
 }

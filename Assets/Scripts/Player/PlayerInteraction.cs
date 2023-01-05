@@ -15,7 +15,7 @@ namespace Insolence.core
         {
             uiControl = GameObject.Find("InGameUI").GetComponent<InGameUIController>();
         }
-        void FixedUpdate()
+        void Update()
         {
             HandleInteraction();
         }

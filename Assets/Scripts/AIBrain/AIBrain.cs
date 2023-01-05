@@ -37,6 +37,11 @@ namespace Insolence.AIBrain
                 float considerationScore = action.considerations[i].ScoreConsideration();
                 score *= considerationScore;
 
+                if(action.name == "Interact" && !npc.GetInteractable())
+                {
+                    score = 0;
+                }
+                
                 if (score == 0)
                 {
                     action.score = 0;

@@ -3313,7 +3313,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3032192031084570150, guid: baf2d3ee22d9a7645bd5149b69971b05, type: 3}
       propertyPath: availableActions.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3032192031084570150, guid: baf2d3ee22d9a7645bd5149b69971b05, type: 3}
       propertyPath: availableActions.Array.data[0]
@@ -3327,6 +3327,10 @@ PrefabInstance:
       propertyPath: availableActions.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: 1d6edf40f298c3342a17a1cc931f559b, type: 2}
+    - target: {fileID: 3032192031084570150, guid: baf2d3ee22d9a7645bd5149b69971b05, type: 3}
+      propertyPath: availableActions.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: ccb5c484a5d7deb46ae36022c874b39f, type: 2}
     - target: {fileID: 7816020604320155252, guid: baf2d3ee22d9a7645bd5149b69971b05, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 2432330404798905283}
   - component: {fileID: 3032192031084570150}
   - component: {fileID: 6983068585820557565}
+  - component: {fileID: 1717967380193974075}
   m_Layer: 0
   m_Name: FriendlyNpc
   m_TagString: NPC
@@ -227,6 +228,8 @@ MonoBehaviour:
   currentHealth: 50
   maxStamina: 100
   currentStamina: 100
+  hunger: 0
+  money: 0
   name: Jeb
   currentScene: 
 --- !u!114 &3032192031084570150
@@ -242,6 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   availableActions: []
+  targetInteractable: {fileID: 0}
 --- !u!114 &6983068585820557565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,6 +258,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f1dea24856c4c4da831039e92fc2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &1717967380193974075
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7816020604320155253}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0.5}
 --- !u!1 &7816020605056101603
 GameObject:
   m_ObjectHideFlags: 0

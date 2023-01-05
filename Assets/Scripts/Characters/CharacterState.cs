@@ -9,7 +9,7 @@ namespace Insolence.core
         [SerializeField] public int level = 1;
         [SerializeField] public int maxHealth = 50;
         [SerializeField] public int currentHealth = 50;
-        [SerializeField] public int maxStamina = 100;
+        [SerializeField] public int maxStamina = 100; //also used as energy for labor
         [SerializeField] public int currentStamina = 100;
         [SerializeField] public int hunger = 0;
         [SerializeField] public int money = 0;
