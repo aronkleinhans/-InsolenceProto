@@ -6,13 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/_ProjectInsolence/Scenes/MainMenu.unity
     guid: fbf17e68e9adc0241bb116b7f54d69f6
   - enabled: 1
-    path: Assets/Scenes/testingGrounds.unity
+    path: Assets/_ProjectInsolence/Scenes/testingGrounds.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/testingGrounds 1.unity
+    path: Assets/_ProjectInsolence/Scenes/testingGrounds 1.unity
     guid: ca2a140fea4eae3468f90299886a4997
   - enabled: 1
     path: Assets/KinematicCharacterController/Examples/Scenes/CharacterPlayground.unity
