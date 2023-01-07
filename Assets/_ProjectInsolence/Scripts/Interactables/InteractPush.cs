@@ -10,10 +10,10 @@ public class InteractPush : Interactable
     {
         rb = GetComponent<Rigidbody>();
     }
-    public override void Interaction(Transform playerTf)
+    public override void Interaction(Transform tf)
     {
-        Debug.Log("pushed " + transform.gameObject.name);
+        Debug.Log(tf.gameObject.name + " pushed " + transform.gameObject.name);
 
-        rb.AddForce(playerTf.forward * pushForce, ForceMode.VelocityChange);
+        rb.AddForce(tf.forward * pushForce, ForceMode.VelocityChange);
     }
 }

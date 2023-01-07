@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Resource", menuName = "Resource")]
-public class ResourceType : ScriptableObject
+namespace Insolence.Core
 {
-    [SerializeField] string name;
-    [SerializeField] string type;
-    [SerializeField] int amount;
+    [CreateAssetMenu(fileName = "New Farmable Resource", menuName = "Insolence/Resource")]
+    public class ResourceType : ScriptableObject
+    {
+        [SerializeField] string name;
+        [SerializeField] string type;
+        [SerializeField] int initialAmount;
+        [SerializeField] int amount;
+        [SerializeField] Item item;
+    }
 }
+
+
