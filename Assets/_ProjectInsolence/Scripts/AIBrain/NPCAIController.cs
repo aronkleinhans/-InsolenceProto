@@ -21,8 +21,9 @@ namespace Insolence.AIBrain
 
         public void Update()
         {
+            
             if (brain.finishedDeciding) 
-            { 
+            {
                 if (brain.bestAction != null)
                 {
                     brain.bestAction.Execute(this);
@@ -40,17 +41,6 @@ namespace Insolence.AIBrain
             return targetInteractable != null;
         }
 
-        public void DoInteract()
-        {
-            if (targetInteractable)
-            {
-                Debug.Log(gameObject.name + " is Interacting.");
-
-                targetInteractable.GetComponent<Interactable>().Interaction(transform);
-                OnFinishedAction();
-            }
-            
-        }
 
         #region Coroutines
 
@@ -68,6 +58,11 @@ namespace Insolence.AIBrain
         {
             Debug.Log("Eating");
             StartCoroutine(EatCoroutine(time));
+        }
+        public void DoInteract()
+        {
+            Debug.Log("Interacting");
+            StartCoroutine(InteractCoroutine());
         }
 
         private IEnumerator WorkCoroutine(int time, string name)
@@ -112,6 +107,20 @@ namespace Insolence.AIBrain
             OnFinishedAction();
         }
 
+        private IEnumerator InteractCoroutine()
+        {
+            if (targetInteractable)
+            {
+                yield return new WaitForSeconds(1);
+
+                targetInteractable.GetComponent<Interactable>().Interaction(transform);
+                targetInteractable = null;
+                brain.bestAction = null;
+                OnFinishedAction();
+            }
+
+        }
+
         #endregion
 
         private void OnTriggerEnter(Collider other)
@@ -128,6 +137,7 @@ namespace Insolence.AIBrain
         {
             if (other.gameObject.tag == "Interactable" && other.gameObject.name == targetInteractable.name)
             {
+                Debug.Log("Interactable lost");
                 targetInteractable = null;
             }
             OnFinishedAction();

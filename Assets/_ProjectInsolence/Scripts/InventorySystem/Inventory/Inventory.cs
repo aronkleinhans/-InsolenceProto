@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using Insolence.AIBrain.Considerations;
+using Insolence.SaveUtility;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
+
 
 namespace Insolence.Core
 {
@@ -28,7 +32,8 @@ namespace Insolence.Core
         [SerializeField] public Item ringSlotC;
         [SerializeField] public Item ringSlotD;
 
-        [SerializeField] public Item equippedInHands;
+        [SerializeField] public Item equippedInRightHandSlot;
+        [SerializeField] public Item equippedInLeftHandSlot;
 
         [Header("Equipment Slots")]
         [SerializeField] public GameObject _headSlot;
@@ -43,7 +48,8 @@ namespace Insolence.Core
         [SerializeField] public GameObject _ringSlotC;
         [SerializeField] public GameObject _ringSlotD;
 
-        [SerializeField] public GameObject _equippedInHands;
+        [SerializeField] public GameObject _equippedInRightHandSlot;
+        [SerializeField] public GameObject _equippedInLeftHandSlot;
 
         [Header("Inventory Settings")]
         [SerializeField] int maxBigSlots = 2; //on characters upper back
@@ -52,7 +58,15 @@ namespace Insolence.Core
         [SerializeField] int maxBagSlots = 20; //potions etc, not visible on char, slower activation
         [SerializeField] float pushForce = 5f;
 
+        public List<Item> weaponList = new List<Item>();
+
         private bool isSuccessful;
+        private void Start()
+        {
+            DynamicObject dynamicObject = GetComponent<DynamicObject>();
+            dynamicObject.prepareToSaveDelegates += PrepareToSaveObjectState;
+            dynamicObject.loadObjectStateDelegates += LoadObjectState;
+        }
         public bool AddItem(Item item)
         {
             checkItemType(item, true);
@@ -60,37 +74,64 @@ namespace Insolence.Core
         }
         public void DropItem(Item item)
         {
-            Debug.Log("dropping " + equippedInHands.name);
+            Debug.Log("dropping " + equippedInRightHandSlot.name);
             GameObject droppedItem = Instantiate(item.itemPrefab, gameObject.transform.position + gameObject.transform.forward, Quaternion.LookRotation(gameObject.transform.forward));
             droppedItem.transform.parent = GameObject.FindGameObjectWithTag("DynamicRoot").transform;
             droppedItem.GetComponent<Rigidbody>().AddForce(transform.forward * pushForce, ForceMode.VelocityChange);
-            
-            _equippedInHands.GetComponent<ItemSOHolder>().item = null;
-            equippedInHands = null;
+
+
+            _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = null;
+            equippedInRightHandSlot = null;
         }
         public void RemoveItem(Item item)
         {
             checkItemType(item, false);
         }
-        public void SwapItem()
+        public void CycleRightHandWeapons()
         {
-            List<Item> weaponList = new List<Item>();
-            weaponList.AddRange(bigItems);
-            weaponList.AddRange(mediumItems);
             
-            if (equippedInHands != null)
+            if (equippedInRightHandSlot != null)
             {
-                Item temp = equippedInHands;
-                
-                if (AddItem(equippedInHands))
+                if (AddItem(equippedInRightHandSlot))
                 {
-                    equippedInHands = weaponList[0];
+                    if (weaponList.Count > 0)
+                    {
+                        equippedInRightHandSlot = weaponList[0];
+                        _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = equippedInRightHandSlot;
+                        RemoveItem(equippedInRightHandSlot);
+                        weaponList.Remove(weaponList[0]);
+                    }
+
+                    else
+                    {
+                        if(equippedInRightHandSlot.type != ItemEnums.ItemType.Misc)
+                        {
+                            weaponList.Add(equippedInRightHandSlot);
+                        }
+                        equippedInRightHandSlot = null;
+                        _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = equippedInRightHandSlot;                      
+                    }       
                 }
                 else
                 {
-                    DropItem(equippedInHands);
-                    equippedInHands = weaponList[0];
+                    DropItem(equippedInRightHandSlot);
+                    equippedInRightHandSlot = weaponList[0];
+                    _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = equippedInRightHandSlot;
+                    weaponList.Remove(weaponList[0]);
                 }
+            }
+            else
+            {
+                equippedInRightHandSlot = weaponList[0];
+                _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = equippedInRightHandSlot;
+                RemoveItem(equippedInRightHandSlot);
+                weaponList.Remove(weaponList[0]);
+            }
+            
+            Debug.Log("Items in weapon list:");
+            for (int i = 0; i < weaponList.Count; i++)
+            {
+                Debug.Log(weaponList[i].name);
             }
         }
         private void checkItemType(Item item, bool isAdd)
@@ -257,22 +298,23 @@ namespace Insolence.Core
                 {
                     case "big":
                         {
-                            if (equippedInHands != null && bigItems.Count == maxBigSlots)
+                            if (equippedInRightHandSlot != null && bigItems.Count == maxBigSlots)
                             {
-                                DropItem(equippedInHands);
-                                equippedInHands = item;
-                                _equippedInHands.GetComponent<ItemSOHolder>().item = item;
+                                DropItem(equippedInRightHandSlot);
+                                equippedInRightHandSlot = item;
+                                _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = item;
                                 isSuccessful = true;
                             } 
-                            else if (equippedInHands == null)
+                            else if (equippedInRightHandSlot == null)
                             {
-                                equippedInHands = item;
-                                _equippedInHands.GetComponent<ItemSOHolder>().item = item;
+                                equippedInRightHandSlot = item;
+                                _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = item;
                                 isSuccessful = true;
                             }
                             else if (bigItems.Count < maxBigSlots)
                             {
                                 bigItems.Add(item);
+                                weaponList.Add(item);
                                 isSuccessful = true;
                             }
                             break;
@@ -280,26 +322,25 @@ namespace Insolence.Core
 
                     case "medium":
                         {
-                            if (equippedInHands != null)
+                            if (equippedInRightHandSlot != null && mediumItems.Count == maxMediumSlots)
                             {
-                                DropItem(equippedInHands);
-                                equippedInHands = item;
-                                _equippedInHands.GetComponent<ItemSOHolder>().item = item;
+                                DropItem(equippedInRightHandSlot);
+                                equippedInRightHandSlot = item;
+                                _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = item;
+                                isSuccessful = true;
+                            }
+                            else if (equippedInRightHandSlot == null)
+                            {
+                                equippedInRightHandSlot = item;
+                                _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = item;
                                 isSuccessful = true;
                             }
                             else if (mediumItems.Count < maxMediumSlots)
                             {
                                 mediumItems.Add(item);
-
+                                weaponList.Add(item);
                                 isSuccessful = true;
                             }
-                            else if (equippedInHands == null)
-                            {
-                                equippedInHands = item;
-                                _equippedInHands.GetComponent<ItemSOHolder>().item = item;
-                                isSuccessful = true;
-                            }
-                             
                             break;
                         }
 
@@ -451,15 +492,17 @@ namespace Insolence.Core
                         }
                     case "misc":
                         {
-                            if (equippedInHands == null)
+                            if (equippedInRightHandSlot == null)
                             {
-                                equippedInHands = item;
+                                equippedInRightHandSlot = item;
+                                _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = item;
                                 isSuccessful = true;
                             }
                             else
                             {
-                                DropItem(equippedInHands);
-                                equippedInHands = item;
+                                DropItem(equippedInRightHandSlot);
+                                equippedInRightHandSlot = item;
+                                _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = item;
                                 isSuccessful = true;
                             }
                             break;
@@ -603,10 +646,12 @@ namespace Insolence.Core
                         }
                     case "misc":
                         {
-                            if (equippedInHands != null)
+                            if (equippedInRightHandSlot != null)
                             {
-                                DropItem(equippedInHands);
-                                equippedInHands = null;
+                                DropItem(equippedInRightHandSlot);
+                                equippedInRightHandSlot = item;
+                                _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = item;
+
                             }
                             break;
                         }
@@ -623,7 +668,14 @@ namespace Insolence.Core
 
                 }
             }
-            
+        }
+        private void PrepareToSaveObjectState(ObjectState objectState)
+        {
+            objectState.genericValues[name + ".Inventory.Gold"] = gold;
+        }
+        private void LoadObjectState(ObjectState objectState)
+        {
+ 
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Insolence.Core
         [SerializeField] public int money = 0;
         [SerializeField] public new string name = "";
 
+        [SerializeField] Inventory inv;
 
         [SerializeField] public string currentScene;
 
@@ -24,6 +25,7 @@ namespace Insolence.Core
             DynamicObject dynamicObject = GetComponent<DynamicObject>();
             dynamicObject.prepareToSaveDelegates += PrepareToSaveObjectState;
             dynamicObject.loadObjectStateDelegates += LoadObjectState;
+            inv = GetComponent<Inventory>();
         }
 
         private void Update()
@@ -33,15 +35,17 @@ namespace Insolence.Core
 
         private void PrepareToSaveObjectState(ObjectState objectState)
         {
-            objectState.genericValues[name + "Stats.level"] = level;
-            objectState.genericValues[name + "Stats.health"] = maxHealth;
-            objectState.genericValues[name + "Stats.currentHealth"] = currentHealth;
-            objectState.genericValues[name + "Stats.maxStamina"] = maxStamina;
-            objectState.genericValues[name + "Stats.currentStamina"] = currentStamina;
-            objectState.genericValues[name + "Stats.hunger"] = hunger;
-            objectState.genericValues[name + "Stats.money"] = money;
-            objectState.genericValues[name + "Stats.name"] = name;
+            objectState.genericValues[name + ".Stats.level"] = level;
+            objectState.genericValues[name + ".Stats.health"] = maxHealth;
+            objectState.genericValues[name + ".Stats.currentHealth"] = currentHealth;
+            objectState.genericValues[name + ".Stats.maxStamina"] = maxStamina;
+            objectState.genericValues[name + ".Stats.currentStamina"] = currentStamina;
+            objectState.genericValues[name + ".Stats.hunger"] = hunger;
+            objectState.genericValues[name + ".Stats.money"] = money;
+            objectState.genericValues[name + ".Stats.name"] = name;
             objectState.genericValues["savedLevel"] = currentScene;
+
+            //objectState.genericValues[name + "Inventory"] = inv;
         }
         private void LoadObjectState(ObjectState objectState)
         {
@@ -49,16 +53,18 @@ namespace Insolence.Core
             transform.position = SaveUtils.ConvertToVector3(objectState.position);
             transform.rotation = SaveUtils.ConvertToQuaternion(objectState.rotation);
             // Load the reference to the stats
-            level = Convert.ToInt32(objectState.genericValues[name + "Stats.level"]);
-            maxHealth = Convert.ToInt32(objectState.genericValues[name + "Stats.health"]);
-            currentHealth = Convert.ToInt32(objectState.genericValues[name + "Stats.currentHealth"]);
-            maxStamina = Convert.ToInt32(objectState.genericValues[name + "Stats.maxStamina"]);
-            currentStamina = Convert.ToInt32(objectState.genericValues[name + "Stats.currentStamina"]);
-            hunger = Convert.ToInt32(objectState.genericValues[name + "Stats.hunger"]);
-            money = Convert.ToInt32(objectState.genericValues[name + "Stats.money"]);
-            name = Convert.ToString(objectState.genericValues[name + "Stats.name"]);
-            currentScene = Convert.ToString(objectState.genericValues["savedLevel"]);
+            level = Convert.ToInt32(objectState.genericValues[name + ".Stats.level"]);
+            maxHealth = Convert.ToInt32(objectState.genericValues[name + ".Stats.health"]);
+            currentHealth = Convert.ToInt32(objectState.genericValues[name + ".Stats.currentHealth"]);
+            maxStamina = Convert.ToInt32(objectState.genericValues[name + ".Stats.maxStamina"]);
+            currentStamina = Convert.ToInt32(objectState.genericValues[name + ".Stats.currentStamina"]);
+            hunger = Convert.ToInt32(objectState.genericValues[name + ".Stats.hunger"]);
+            money = Convert.ToInt32(objectState.genericValues[name + ".Stats.money"]);
+            name = Convert.ToString(objectState.genericValues[name + ".Stats.name"]);
+            currentScene = Convert.ToString(objectState.genericValues[".savedLevel"]);
 
+            
+            //inv = (Inventory)objectState.genericValues[name + "Inventory"];
         }
     }
 }

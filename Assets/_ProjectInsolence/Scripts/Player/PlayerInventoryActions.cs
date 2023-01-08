@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Insolence.Core
 {
-    public class DropItemTest : MonoBehaviour
+    public class PlayerInventoryActions : MonoBehaviour
     {
         float pushForce = 5f;
         // Start is called before the first frame update
@@ -19,12 +19,13 @@ namespace Insolence.Core
             Inventory inv = gameObject.GetComponent<Inventory>();
 
             if (Input.GetKeyDown(KeyCode.G)){
-                Item item = inv.equippedInHands;
+                Item item = inv.equippedInRightHandSlot;
+                
                 inv.DropItem(item); 
             }
             if (Input.GetKeyDown(KeyCode.H))
             {
-                inv.SwapItem();
+                inv.CycleRightHandWeapons();
             }
         }
     }

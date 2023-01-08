@@ -151,7 +151,7 @@ MonoBehaviour:
     sceneName: 
     position: []
     rotation: []
-    isPrefab: 0
+    isPrefab: 1
     prefabGuid: bd366d88-9cde-45bd-8dc8-5f87caba703b
     childrenGuids: []
 --- !u!114 &988479960826638613
