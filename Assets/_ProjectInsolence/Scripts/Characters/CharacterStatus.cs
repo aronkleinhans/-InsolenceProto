@@ -44,8 +44,6 @@ namespace Insolence.Core
             objectState.genericValues[name + ".Stats.money"] = money;
             objectState.genericValues[name + ".Stats.name"] = name;
             objectState.genericValues["savedLevel"] = currentScene;
-
-            //objectState.genericValues[name + "Inventory"] = inv;
         }
         private void LoadObjectState(ObjectState objectState)
         {
@@ -62,9 +60,6 @@ namespace Insolence.Core
             money = Convert.ToInt32(objectState.genericValues[name + ".Stats.money"]);
             name = Convert.ToString(objectState.genericValues[name + ".Stats.name"]);
             currentScene = Convert.ToString(objectState.genericValues[".savedLevel"]);
-
-            
-            //inv = (Inventory)objectState.genericValues[name + "Inventory"];
         }
     }
 }

@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49766638dfb34b84b94dfe1c7b24a259, type: 3}
-  m_Name: Hammy
+  m_Name: Sword
   m_EditorClassIdentifier: 
-  name: Hammer of Flabbergast
+  itemID: SWD001
+  name: sword
   description: 
-  value: 100
+  value: 0
   type: 0
-  size: 1
-  weaponType: 3
+  size: 2
+  weaponType: 1
   armorType: 0
-  itemPrefab: {fileID: 986932269985855856, guid: 834a81f38ed715e4d91ebbcfaf34276d, type: 3}
-  itemEquipPrefab: {fileID: 1549083794311288, guid: efe9aff527910ec48866a9de4bd0ef34, type: 3}
-  isTwoHanded: 1
-  damage: 20
-  attackSpeed: 4
+  itemPrefab: {fileID: 1981033437270906863, guid: febe31b34db2ac14ca796ab466488a68, type: 3}
+  itemEquipPrefab: {fileID: 1737805685605432, guid: 02b50c2f99aa6f64b90172cff30899e9, type: 3}
+  isTwoHanded: 0
+  damage: 0
+  attackSpeed: 0
   defense: 0
   armor: 0
   health: 0

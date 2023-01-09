@@ -1,10 +1,12 @@
 using Insolence.Core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Insolence
 {
+    [Serializable]
     public class ShowEquipment : MonoBehaviour
     {
         GameObject newObject;

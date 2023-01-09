@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,9 +9,10 @@ namespace Insolence.Core
     public class Item : ScriptableObject
     {
         [Header("Item Info")]
-        [SerializeField] string name;
-        [SerializeField] string description;
-        [SerializeField] int value;
+        [SerializeField] public string itemID;
+        [SerializeField] public string name;
+        [SerializeField] public string description;
+        [SerializeField] public int value;
         [SerializeField] public ItemEnums.ItemType type;
         [SerializeField] public ItemEnums.ItemSize size;
         [SerializeField] public ItemEnums.WeaponType weaponType;
@@ -20,17 +22,17 @@ namespace Insolence.Core
         [Header("Item Properties")]
         [SerializeField] public GameObject itemPrefab;
         [SerializeField] public GameObject itemEquipPrefab;
-        [SerializeField] bool isTwoHanded;
+        [SerializeField] public bool isTwoHanded;
         
         [Header("Item Stats & Bonuses")]
-        [SerializeField] int damage;        
-        [SerializeField] int attackSpeed;
-        [SerializeField] int defense;
+        [SerializeField] public int damage;        
+        [SerializeField] public int attackSpeed;
+        [SerializeField] public int defense;
         
-        [SerializeField] int armor;
-        [SerializeField] int health;
-        [SerializeField] int stamina;
+        [SerializeField] public int armor;
+        [SerializeField] public int health;
+        [SerializeField] public int stamina;
 
-        [SerializeField] SpecialEffect specialEffect;
+        [SerializeField] public SpecialEffect specialEffect;
     }
 }

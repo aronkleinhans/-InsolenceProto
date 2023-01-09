@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Insolence.Core
 {
+    [Serializable]
     public class Resource : MonoBehaviour
     {
         [SerializeField] ResourceType resourceType;

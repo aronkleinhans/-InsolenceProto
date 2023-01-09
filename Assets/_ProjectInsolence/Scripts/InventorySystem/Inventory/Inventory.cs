@@ -8,6 +8,7 @@ using static Cinemachine.DocumentationSortingAttribute;
 
 namespace Insolence.Core
 {
+    [Serializable]
     public class Inventory : MonoBehaviour
     {
         [Header("Inventory")]
@@ -58,15 +59,10 @@ namespace Insolence.Core
         [SerializeField] int maxBagSlots = 20; //potions etc, not visible on char, slower activation
         [SerializeField] float pushForce = 5f;
 
-        public List<Item> weaponList = new List<Item>();
+        [SerializeField]public List<Item> weaponList = new List<Item>();
 
-        private bool isSuccessful;
-        private void Start()
-        {
-            DynamicObject dynamicObject = GetComponent<DynamicObject>();
-            dynamicObject.prepareToSaveDelegates += PrepareToSaveObjectState;
-            dynamicObject.loadObjectStateDelegates += LoadObjectState;
-        }
+        [SerializeField] private bool isSuccessful;
+
         public bool AddItem(Item item)
         {
             checkItemType(item, true);
@@ -668,14 +664,6 @@ namespace Insolence.Core
 
                 }
             }
-        }
-        private void PrepareToSaveObjectState(ObjectState objectState)
-        {
-            objectState.genericValues[name + ".Inventory.Gold"] = gold;
-        }
-        private void LoadObjectState(ObjectState objectState)
-        {
- 
         }
     }
 }

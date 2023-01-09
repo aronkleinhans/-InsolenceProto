@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49766638dfb34b84b94dfe1c7b24a259, type: 3}
   m_Name: Whiskey
   m_EditorClassIdentifier: 
+  itemID: POT001
   name: Whiskey
   description: A strange bottle containing a liquid with a strong aroma...
   value: 12
