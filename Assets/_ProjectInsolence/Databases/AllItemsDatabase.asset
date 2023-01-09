@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 787ebb5eed075ea458eaf03ace5aaf89, type: 3}
-  m_Name: Weapon Database
+  m_Script: {fileID: 11500000, guid: 150c3c8aa6d4c9c40b9cd56bedd9d63b, type: 3}
+  m_Name: AllItemsDatabase
   m_EditorClassIdentifier: 
-  itemType: Weapon
+  itemType: All Items
   contents:
+  - {fileID: 11400000, guid: d9f7c6213cbe6dc4083e83b6e1078495, type: 2}
   - {fileID: 11400000, guid: 10f5793143ab98349b980c0560498040, type: 2}
   - {fileID: 11400000, guid: dee5883089f37dd45b82d231a43c8850, type: 2}
   - {fileID: 11400000, guid: 4c6af63cde9d4f94ebad99ff81e92b14, type: 2}
+  - {fileID: 11400000, guid: fe5a7e98286e6b648b17af30927496d1, type: 2}

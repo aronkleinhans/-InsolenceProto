@@ -5,17 +5,10 @@ using UnityEditor;
 
 namespace Insolence.Core
 {
-    public class Database : ScriptableObject
+    public class AllItemsDB : Database
     {
-        [SerializeField] public string itemType;
-        
-        [SerializeField] public Dictionary<string, Item> items = new Dictionary<string, Item>();
-
-        [SerializeField] public List<Item> contents = new List<Item>();
-
-        [ContextMenu("Collect Items")]
-        
-        public virtual void CollectItems()
+        [ContextMenu("Collect All Items")]
+        public override void CollectItems()
         {
             items.Clear();
 
@@ -25,15 +18,13 @@ namespace Insolence.Core
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
                 Item item = AssetDatabase.LoadAssetAtPath<Item>(assetPath);
-                
-                if (item.type.ToString() == itemType)
+
+                if (itemType == "All Items")
                 {
-                    items[item.itemID] = item; 
+                    items[item.itemID] = item;
                     contents.Add(item);
                 }
             }
         }
-
     }
-
 }

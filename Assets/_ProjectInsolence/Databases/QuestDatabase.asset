@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 787ebb5eed075ea458eaf03ace5aaf89, type: 3}
-  m_Name: Key Database
+  m_Name: QuestDatabase
   m_EditorClassIdentifier: 
-  itemType: Key
+  itemType: Quest
   contents:
-  - {fileID: 11400000, guid: 8aa835b577b7b9e4d919b01c55fc790f, type: 2}
+  - {fileID: 11400000, guid: d9f7c6213cbe6dc4083e83b6e1078495, type: 2}

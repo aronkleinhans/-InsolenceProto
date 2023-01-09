@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82c09b70d7f17c841b2d0a0ce1d78229, type: 3}
   m_Name: Lesser Heal
   m_EditorClassIdentifier: 
+  effectID: healZZ
   name: Lesser Heal
   description: 
   duration: 0

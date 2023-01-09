@@ -7,6 +7,7 @@ using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Insolence.Core.ItemEnums;
+using static UnityEditor.Progress;
 using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Insolence.Core
@@ -18,6 +19,7 @@ namespace Insolence.Core
         private string[] itemTypes;
         private int selectedIndex;
         private Dictionary<string, Database> databases;
+
         static int e = 1;
         bool[] foldout = new bool[e];
         
@@ -49,44 +51,38 @@ namespace Insolence.Core
             if (GUILayout.Button("Collect Items"))
             {
                 itemTypes = GetItemTypes();
+
                 databases[itemType].CollectItems();
+                   
             }
             if (!databases.ContainsKey(itemType))
             {
+
                 databases[itemType] = CreateDatabase(itemType);
+
             }
-
-            Database database = databases[itemType];
-            EditorGUILayout.LabelField("Items", EditorStyles.boldLabel);
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-
-            e = database.items.Count;
-            int i = 0;
-            
-            foreach (KeyValuePair<string, Item> entry in database.items)
-            {
-                if (entry.Value.name.ToLower().Contains(searchString.ToLower()))
+                Database database = databases[itemType];
+                EditorGUILayout.LabelField("Items", EditorStyles.boldLabel);
+                e = database.items.Count;
+                scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+                
+                int i = 0;
+                
+                foreach (KeyValuePair<string, Item> entry in database.items)
                 {
-                    foldout[i] = EditorGUILayout.Foldout(foldout[i], entry.Value.name);
+                    if (entry.Value.name.ToLower().Contains(searchString.ToLower()) || entry.Value.itemID.ToLower().Contains(searchString.ToLower()))
+                    {
+                        foldout[i] = EditorGUILayout.Foldout(foldout[i], entry.Value.name);
 
-                    if (foldout[i])
-                    {                        
-                        EditorGUILayout.ObjectField(entry.Value, typeof(Item), false);
-                        entry.Value.itemID = EditorGUILayout.TextField("ID", entry.Value.itemID);
-                        entry.Value.name = EditorGUILayout.TextField("Name", entry.Value.name);
-                        entry.Value.description = EditorGUILayout.TextField("Description", entry.Value.description);
-                        entry.Value.value = EditorGUILayout.IntField("Value", entry.Value.value);
-                        entry.Value.type = (ItemType)EditorGUILayout.EnumPopup("Type", entry.Value.type);
+                        if (foldout[i])
+                        {
+                            EditorGUILayout.ObjectField(entry.Value, typeof(Item), false);
+                            entry.Value.itemID = EditorGUILayout.TextField("ID", entry.Value.itemID);
+                        }
+                        EditorGUILayout.EndFoldoutHeaderGroup();
                     }
-                    
-
-                    EditorGUILayout.EndFoldoutHeaderGroup();
-
-
+                    i++;
                 }
-                i++;
-            }
-
             EditorGUILayout.EndScrollView();
         }
 
@@ -100,6 +96,7 @@ namespace Insolence.Core
                 Item item = AssetDatabase.LoadAssetAtPath<Item>(assetPath);
                 types.Add(item.type.ToString());
             }
+            types.Add("All Items");
             return new List<string>(types).ToArray();
         }
 
@@ -110,17 +107,29 @@ namespace Insolence.Core
             {
                 AssetDatabase.CreateFolder("_ProjectInsolence", "Databases");
             }
-            path += itemType + " Database.asset";
-            Database database = ScriptableObject.CreateInstance<Database>();
-            database.itemType = itemType;
-            database.CollectItems();
-            AssetDatabase.CreateAsset(database, path);
-            AssetDatabase.SaveAssets();
-            foreach (KeyValuePair<string, Item> entry in database.items)
+            
+            if (itemType == "All Items")
             {
-                Debug.Log(entry.Value.name);
+                Database AllItemsDB = ScriptableObject.CreateInstance<AllItemsDB>();
+                AllItemsDB.itemType = itemType;
+                AllItemsDB.CollectItems();
+                AssetDatabase.CreateAsset(AllItemsDB, "Assets/_ProjectInsolence/Databases/AllItemsDatabase.asset");
+                AssetDatabase.SaveAssets();
+                return AllItemsDB;
             }
-            return database;
+            else
+            {
+                path += itemType + "Database.asset";
+                Database database = ScriptableObject.CreateInstance<Database>();
+                database.itemType = itemType;
+                database.CollectItems();
+                AssetDatabase.CreateAsset(database, path);
+                AssetDatabase.SaveAssets();
+                return database;
+            }
+            
+
+            
         }
         
         public Item CreateItem()

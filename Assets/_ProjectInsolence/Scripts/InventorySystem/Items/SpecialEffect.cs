@@ -9,6 +9,7 @@ namespace Insolence.Core
     //item effects like procs, buffs, debuffs, etc.
     public abstract class SpecialEffect : ScriptableObject
     {
+        [SerializeField] public string effectID;
         [SerializeField] string name;
         [SerializeField] string description;
         [SerializeField] int duration;
