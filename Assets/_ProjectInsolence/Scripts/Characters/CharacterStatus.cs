@@ -70,7 +70,7 @@ namespace Insolence.Core
             hunger = Convert.ToInt32(objectState.genericValues[name + ".Stats.hunger"]);
             money = Convert.ToInt32(objectState.genericValues[name + ".Stats.money"]);
             name = Convert.ToString(objectState.genericValues[name + ".Stats.name"]);
-            currentScene = Convert.ToString(objectState.genericValues[".savedLevel"]);
+            currentScene = Convert.ToString(objectState.genericValues["savedLevel"]);
 
             Debug.Log("Loading inventory");
             invList = (List<string>)objectState.genericValues[name + ".Inventory"];

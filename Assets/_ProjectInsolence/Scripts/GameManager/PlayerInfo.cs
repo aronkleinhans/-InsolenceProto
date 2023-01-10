@@ -48,7 +48,7 @@ namespace Insolence.Core
 
             foreach (string itemID in invList)
             {
-                Debug.Log("Adding ItemID: " + database.items[itemID]);
+                Debug.Log("Adding ItemID to inventory list: " + database.items[itemID].itemID);
             }
         }
         public void UpdateCharacterState(GameObject player)
@@ -67,7 +67,7 @@ namespace Insolence.Core
 
             foreach (string itemID in invList)
             {
-                Debug.Log("Adding ItemID: " + itemID);
+                Debug.Log("Adding Item back to inventory by ID: " + itemID);
                 inv.AddItem(database.items[itemID]);
             }
         }

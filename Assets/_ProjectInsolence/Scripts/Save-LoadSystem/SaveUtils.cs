@@ -12,15 +12,17 @@ namespace Insolence.SaveUtility
     public class SaveUtils
     {
         // The directory under Resources that the dynamic objects' prefabs can be loaded from
-        private static string ENVIRONMENT_PREFABS_PATH = "Prefabs/Environment/DynamicObjects";
-        private static string CHARACTERS_PREFABS_PATH = "Prefabs/Characters";
+        //private static string ENVIRONMENT_PREFABS_PATH = "Prefabs/Environment/DynamicObjects";
+        //private static string CHARACTERS_PREFABS_PATH = "Prefabs/Characters";
+        private static string PREFABS_PATH = "Prefabs";
         // A dictionary of prefab guid to prefab
-        public static Dictionary<string, GameObject> envPrefabs = LoadPrefabs(ENVIRONMENT_PREFABS_PATH);
-        public static Dictionary<string, GameObject> charPrefabs = LoadPrefabs(CHARACTERS_PREFABS_PATH);
+        //public static Dictionary<string, GameObject> envPrefabs = LoadPrefabs(ENVIRONMENT_PREFABS_PATH);
+        //public static Dictionary<string, GameObject> charPrefabs = LoadPrefabs(CHARACTERS_PREFABS_PATH);
+        public static Dictionary<string, GameObject> allPrefabs = LoadPrefabs(PREFABS_PATH);
 
-        public static Dictionary<string, GameObject>[] prefabCollection = new Dictionary<string, GameObject>[] { envPrefabs, charPrefabs };
+        //public static Dictionary<string, GameObject>[] prefabCollection = new Dictionary<string, GameObject>[] { envPrefabs, charPrefabs, itemsPrefabs };
 
-        public static Dictionary<string, GameObject> mergedPrefabs = mergeDictionaries(prefabCollection);
+        //public static Dictionary<string, GameObject> mergedPrefabs = mergeDictionaries(prefabCollection);
 
 
         public static string SAVE_OBJECTS_PATH = Application.persistentDataPath + "/savegames/default.inso";
@@ -49,7 +51,10 @@ namespace Insolence.SaveUtility
                 DynamicObject dynamicObject = prefab.GetComponent<DynamicObject>();
                 if (dynamicObject == null)
                 {
-                    throw new InvalidOperationException("Prefab does not contain DynamicObject");
+                    //log error then continue
+                    Debug.LogError("Skipping Prefab: " + prefab.name + " does not have a DynamicObject component!");
+                    
+                    continue;
                 }
                 if (!dynamicObject.objectState.isPrefab)
                 {
@@ -232,7 +237,7 @@ namespace Insolence.SaveUtility
 
             List<ObjectState> objectStates = ReadFile<List<ObjectState>>(path);
 
-            ObjectState.LoadObjects(mergedPrefabs, objectStates, GetRootDynamicObject(), sceneName);
+            ObjectState.LoadObjects(allPrefabs, objectStates, GetRootDynamicObject(), sceneName);
 
 
             Debug.Log("Loaded objects from: " + path);
