@@ -22,14 +22,15 @@ namespace Insolence.Core
             {
                
             }
-            if (Input.GetKeyDown(KeyCode.G)){
+            if (Input.GetButtonDown("Drop Item"))
+            {
                 inv.DropItem(inv.equippedInRightHandSlot);
             }
-            if (Input.GetKeyDown(KeyCode.X))
+            if (Input.GetButtonDown("Swap Weapon"))
             {
                 inv.CycleRightHandWeapons();
             }
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (Input.GetButtonDown("Dual Wield"))
             {
                 inv.DualWieldWeapons();
             }

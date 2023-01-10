@@ -157,7 +157,12 @@ namespace Insolence.Core
                         }
                         equippedInRightHandSlot = null;
                         _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = equippedInRightHandSlot;                      
-                    }       
+                    }     
+                    if(equippedInLeftHandSlot != equippedInRightHandSlot)
+                    {
+                        equippedInLeftHandSlot = null;
+                        _equippedInLeftHandSlot.GetComponent<ItemSOHolder>().item = null;
+                    }
                 }
                 else
                 {
@@ -191,6 +196,7 @@ namespace Insolence.Core
                     equippedInLeftHandSlot = equippedInRightHandSlot;
                     _equippedInLeftHandSlot.GetComponent<ItemSOHolder>().item = equippedInLeftHandSlot;
                 }
+                
                 else
                 {
                     equippedInLeftHandSlot = null;
