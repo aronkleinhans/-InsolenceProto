@@ -18,14 +18,20 @@ namespace Insolence.Core
         {
             Inventory inv = gameObject.GetComponent<Inventory>();
 
-            if (Input.GetKeyDown(KeyCode.G)){
-                Item item = inv.equippedInRightHandSlot;
-                
-                inv.DropItem(item); 
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+               
             }
-            if (Input.GetKeyDown(KeyCode.H))
+            if (Input.GetKeyDown(KeyCode.G)){
+                inv.DropItem(inv.equippedInRightHandSlot);
+            }
+            if (Input.GetKeyDown(KeyCode.X))
             {
                 inv.CycleRightHandWeapons();
+            }
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                inv.DualWieldWeapons();
             }
         }
     }

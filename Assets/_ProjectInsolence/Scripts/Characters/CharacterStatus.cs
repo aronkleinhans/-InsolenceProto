@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using Insolence.SaveUtility;
+using System.Collections.Generic;
+using UnityEditor;
 
 namespace Insolence.Core
 {
@@ -15,8 +17,10 @@ namespace Insolence.Core
         [SerializeField] public int hunger = 0;
         [SerializeField] public int money = 0;
         [SerializeField] public new string name = "";
+        [SerializeField] public AllItemsDB database;
 
         [SerializeField] Inventory inv;
+        List<string> invList = new List<string>();
 
         [SerializeField] public string currentScene;
 
@@ -25,6 +29,11 @@ namespace Insolence.Core
             DynamicObject dynamicObject = GetComponent<DynamicObject>();
             dynamicObject.prepareToSaveDelegates += PrepareToSaveObjectState;
             dynamicObject.loadObjectStateDelegates += LoadObjectState;
+
+            string[] guids = AssetDatabase.FindAssets("t:AllItemsDB");
+            string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
+            database = AssetDatabase.LoadAssetAtPath<AllItemsDB>(assetPath);
+
             inv = GetComponent<Inventory>();
         }
 
@@ -44,6 +53,8 @@ namespace Insolence.Core
             objectState.genericValues[name + ".Stats.money"] = money;
             objectState.genericValues[name + ".Stats.name"] = name;
             objectState.genericValues["savedLevel"] = currentScene;
+
+            objectState.genericValues[name + ".Inventory"] = inv.CreateItemIDList();
         }
         private void LoadObjectState(ObjectState objectState)
         {
@@ -60,6 +71,17 @@ namespace Insolence.Core
             money = Convert.ToInt32(objectState.genericValues[name + ".Stats.money"]);
             name = Convert.ToString(objectState.genericValues[name + ".Stats.name"]);
             currentScene = Convert.ToString(objectState.genericValues[".savedLevel"]);
+
+            Debug.Log("Loading inventory");
+            invList = (List<string>)objectState.genericValues[name + ".Inventory"];
+            database.CollectItems();
+            invList.Reverse();
+            foreach (string itemID in invList)
+            {
+                Debug.Log("Loading item: " + itemID);
+                inv.AddItem(database.items[itemID]);
+            }
+
         }
     }
 }

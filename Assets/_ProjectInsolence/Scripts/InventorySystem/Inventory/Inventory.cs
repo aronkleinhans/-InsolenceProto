@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Insolence.AIBrain.Considerations;
 using Insolence.SaveUtility;
+using UnityEditor;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using static Cinemachine.DocumentationSortingAttribute;
 
@@ -70,7 +73,7 @@ namespace Insolence.Core
         }
         public void DropItem(Item item)
         {
-            Debug.Log("dropping " + equippedInRightHandSlot.name);
+            Debug.Log("dropping " + item.name);
             GameObject droppedItem = Instantiate(item.itemPrefab, gameObject.transform.position + gameObject.transform.forward, Quaternion.LookRotation(gameObject.transform.forward));
             droppedItem.transform.parent = GameObject.FindGameObjectWithTag("DynamicRoot").transform;
             droppedItem.GetComponent<Rigidbody>().AddForce(transform.forward * pushForce, ForceMode.VelocityChange);
@@ -78,11 +81,59 @@ namespace Insolence.Core
 
             _equippedInRightHandSlot.GetComponent<ItemSOHolder>().item = null;
             equippedInRightHandSlot = null;
+            _equippedInLeftHandSlot.GetComponent<ItemSOHolder>().item = null;
+            equippedInLeftHandSlot = null;
+
+
         }
         public void RemoveItem(Item item)
         {
             checkItemType(item, false);
         }
+
+        #region inventory save/load
+
+        public List<string> CreateItemIDList()
+        {
+            List<Item> inventory = new List<Item>();
+
+            inventory.AddRange(bigItems);
+            inventory.AddRange(mediumItems);
+            inventory.AddRange(quickItems);
+            inventory.AddRange(bagItems);
+            inventory.AddRange(essentialItems);
+
+            inventory.Add(headSlot);
+            inventory.Add(chestSlot);
+            inventory.Add(legsSlot);
+            inventory.Add(handsSlot);
+            inventory.Add(feetSlot);
+            inventory.Add(backSlot);
+            inventory.Add(neckSlot);
+            inventory.Add(ringSlotA);
+            inventory.Add(ringSlotB);
+            inventory.Add(ringSlotC);
+            inventory.Add(ringSlotD);
+
+            inventory.Add(equippedInRightHandSlot);
+
+            List<string> itemIDs = new List<string>();
+
+            foreach (Item item in inventory)
+            {
+                if (item != null)
+                {
+                    itemIDs.Add(item.itemID);
+                }
+            }
+
+            return itemIDs;
+        }
+
+        #endregion
+
+        #region weapon cycling and dualwield
+
         public void CycleRightHandWeapons()
         {
             
@@ -130,6 +181,29 @@ namespace Insolence.Core
                 Debug.Log(weaponList[i].name);
             }
         }
+
+        public void DualWieldWeapons()
+        {
+            if (equippedInRightHandSlot.pairedWeapon)
+            {
+                if (equippedInLeftHandSlot == null)
+                {
+                    equippedInLeftHandSlot = equippedInRightHandSlot;
+                    _equippedInLeftHandSlot.GetComponent<ItemSOHolder>().item = equippedInLeftHandSlot;
+                }
+                else
+                {
+                    equippedInLeftHandSlot = null;
+                    _equippedInLeftHandSlot.GetComponent<ItemSOHolder>().item = null;
+                }
+                
+
+                Debug.Log("Equipped/unequipped DW item");
+            }
+        }
+        #endregion
+        
+        #region Type&SlotChecks
         private void checkItemType(Item item, bool isAdd)
         {
             switch (item.type)
@@ -665,5 +739,6 @@ namespace Insolence.Core
                 }
             }
         }
+        #endregion
     }
 }

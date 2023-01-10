@@ -23,7 +23,8 @@ namespace Insolence.Core
         [SerializeField] public GameObject itemPrefab;
         [SerializeField] public GameObject itemEquipPrefab;
         [SerializeField] public bool isTwoHanded;
-        
+        [SerializeField] public bool pairedWeapon; //like DS3 dual wield
+
         [Header("Item Stats & Bonuses")]
         [SerializeField] public int damage;        
         [SerializeField] public int attackSpeed;
