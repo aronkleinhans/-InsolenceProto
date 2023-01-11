@@ -2695,6 +2695,10 @@ PrefabInstance:
       value: TP1
       objectReference: {fileID: 0}
     - target: {fileID: 1347526749298519190, guid: 84a5d76fe9724b741ad9e396a4644ada, type: 3}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 1849084794}
+    - target: {fileID: 1347526749298519190, guid: 84a5d76fe9724b741ad9e396a4644ada, type: 3}
       propertyPath: targetScene
       value: testingGrounds
       objectReference: {fileID: 0}
@@ -2716,6 +2720,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84a5d76fe9724b741ad9e396a4644ada, type: 3}
+--- !u!1 &1849084794 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3737527565392190023, guid: 84a5d76fe9724b741ad9e396a4644ada, type: 3}
+  m_PrefabInstance: {fileID: 1849084793}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1852986199
 PrefabInstance:
   m_ObjectHideFlags: 0

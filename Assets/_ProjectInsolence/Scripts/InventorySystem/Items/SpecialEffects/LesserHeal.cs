@@ -12,7 +12,7 @@ namespace Insolence.Core
         public override void ApplyEffect(GameObject target)
         {
             //heal the user
-            target.GetComponent<CharacterStatus>().currentHealth += healAmount;
+            target.GetComponent<CharacterStatus>().Heal(healAmount);
             //show visual effect
             //play sound effect
         }

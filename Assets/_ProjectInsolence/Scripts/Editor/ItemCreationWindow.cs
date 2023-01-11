@@ -11,7 +11,7 @@ namespace Insolence.Core
 
         private SerializedObject serializedItem;
 
-        [MenuItem("Window/Item Creation Window")]
+        [MenuItem("Insolence Tools/Item Creation Window")]
         public static void ShowWindow()
         {
             ItemCreationWindow window = GetWindow<ItemCreationWindow>("Item Creation Window");

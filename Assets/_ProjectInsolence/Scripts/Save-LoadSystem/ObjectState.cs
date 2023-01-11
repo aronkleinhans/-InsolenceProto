@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Insolence.Core;
 using Insolence.KinematicCharacterController;
+using UnityEngine.SceneManagement;
 
 namespace Insolence.SaveUtility
 {
@@ -108,7 +109,7 @@ namespace Insolence.SaveUtility
                     continue;
                 }
                 objectStates.AddRange(dynamicObject.objectState.Save(child.gameObject));
-            }
+            }                      
             return objectStates;
         }
 
@@ -121,7 +122,7 @@ namespace Insolence.SaveUtility
                 ClearChildren(rootObject);
             }
 
-
+            
             Dictionary<string, GameObject> createdObjects = new Dictionary<string, GameObject>();
 
             foreach (ObjectState objectState in objectStates)
@@ -131,7 +132,6 @@ namespace Insolence.SaveUtility
 
                 if (objectState.sceneName == sceneName)
                 {
-
                     if (objectState.isPrefab)
                     {
                         // Do we have a prefab with the required guid?

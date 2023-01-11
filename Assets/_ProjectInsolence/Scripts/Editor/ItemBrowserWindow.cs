@@ -23,7 +23,7 @@ namespace Insolence.Core
         static int e = 1;
         bool[] foldout = new bool[e];
         
-        [MenuItem("Window/Item Browser")]
+        [MenuItem("Insolence Tools/Item Browser")]
         public static void ShowWindow()
         {
             GetWindow<ItemBrowserWindow>("Item Browser");

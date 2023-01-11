@@ -28,6 +28,7 @@ public class MenuController : MonoBehaviour
     }
     public void NewGameDialogYes()
     {
+        PlayerPrefs.DeleteAll();
         SceneManager.LoadScene(newGameLevel);
     }
     public void LoadGameDialog()

@@ -13,6 +13,8 @@ namespace Insolence.Core
         [SerializeField] public string objectPath;
 
         [SerializeField] PlayerInfo playerInfo;
+
+        private bool newGameSpawnsOff = false;
         public static string GetCurrentSceneName()
         {
             return SceneManager.GetActiveScene().name;
@@ -30,6 +32,11 @@ namespace Insolence.Core
 
             StartCoroutine(waitForSceneLoad("", "", sceneName, spawn));
         }
+        
+        public void TurnNewGameSpawnsOff()
+        {
+            newGameSpawnsOff = true;
+        }
 
         public IEnumerator waitForSceneLoad(string pp, string op, string sceneName, string spawn)
         {
@@ -43,7 +50,12 @@ namespace Insolence.Core
                 }
                 if (SceneManager.GetSceneByName(sceneName).isLoaded)
                 {
+                    if (newGameSpawnsOff) 
+                    {
+                        Destroy(GameObject.Find("NewGameSpawn"));
+                    }
                     GameObject.Find(spawn).GetComponentInChildren<SpawnPlayer>().Spawn();
+                    Debug.Log("Scene Change, Spawned Player");
                     SaveUtils.DoLoad(pp, op, true, sceneName);
                 }
             }
@@ -55,7 +67,12 @@ namespace Insolence.Core
                 }
                 if (SceneManager.GetSceneByName(sceneName).isLoaded)
                 {
+                    if (newGameSpawnsOff)
+                    {
+                        Destroy(GameObject.Find("NewGameSpawn"));
+                    }
                     GameObject player = GameObject.Find(spawn).GetComponentInChildren<SpawnPlayer>().Spawn();
+                    Debug.Log("Scene Change, Spawned Player");
 
                     SaveUtils.DoLoad(pp, op, false, sceneName);
 

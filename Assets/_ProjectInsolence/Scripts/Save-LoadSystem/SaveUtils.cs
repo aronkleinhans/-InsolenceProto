@@ -76,8 +76,8 @@ namespace Insolence.SaveUtility
             SaveDynamicObjects(SAVE_OBJECTS_PATH, sceneName);
 
             MenuController mc = GameObject.FindGameObjectWithTag("GameManager").GetComponentInChildren<MenuController>();
-            CharacterStatus ps = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CharacterStatus>();
-            mc.levelToLoad = ps.currentScene;
+            CharacterStatus ps = GetPlayer().GetComponentInChildren<CharacterStatus>();
+            mc.levelToLoad = ps.GetScene();
         }
 
         public static void DoLoad(string playerPath, string objPath, bool menuLoad, string sceneName)
@@ -138,7 +138,7 @@ namespace Insolence.SaveUtility
                 Debug.Log("Creating save folder");
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
             }
-            path = Application.persistentDataPath + "/savegames/" + player.GetComponent<CharacterStatus>().name;
+            path = Application.persistentDataPath + "/savegames/" + player.GetComponent<CharacterStatus>().GetStatus()["name"];
 
             path = IteratePath(path, "player", 1);
 
@@ -196,7 +196,8 @@ namespace Insolence.SaveUtility
             {
                 throw new InvalidOperationException("Cannot find the Player");
             }
-            path = Application.persistentDataPath + "/savegames/" + player.GetComponent<CharacterStatus>().name;
+
+            path = Application.persistentDataPath + "/savegames/" + player.GetComponent<CharacterStatus>().GetStatus()["name"];
 
             path = IteratePath(path, "obj", 1);
 
@@ -238,7 +239,6 @@ namespace Insolence.SaveUtility
             List<ObjectState> objectStates = ReadFile<List<ObjectState>>(path);
 
             ObjectState.LoadObjects(allPrefabs, objectStates, GetRootDynamicObject(), sceneName);
-
 
             Debug.Log("Loaded objects from: " + path);
         }

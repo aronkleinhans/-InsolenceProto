@@ -1,6 +1,9 @@
-using Insolence.SaveUtility;
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using Insolence.SaveUtility;
+using UnityEditor;
 
 namespace Insolence.Core
 {
@@ -13,15 +16,23 @@ namespace Insolence.Core
         [SerializeField] int currentHealth;
         [SerializeField] int maxStamina;
         [SerializeField] int currentStamina;
+        [SerializeField] int hunger;
+        [SerializeField] int gold;
 
         [SerializeField] Inventory inv;
         List<string> invList = new List<string>();
         [SerializeField] AllItemsDB database;
 
         public Vector3 playerPosition;
-        public CharacterStatus currentState;
         public GameObject spawnPoint;
 
+
+        private void Start()
+        {
+            string[] guids = AssetDatabase.FindAssets("t:AllItemsDB");
+            string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
+            database = AssetDatabase.LoadAssetAtPath<AllItemsDB>(assetPath);
+        }
         void Update()
         {
 
@@ -30,18 +41,20 @@ namespace Insolence.Core
         public void GetPlayerInfo()
         {
 
-            currentState = SaveUtils.GetPlayer().GetComponent<CharacterStatus>();
+            Dictionary<string, string> currentState = SaveUtils.GetPlayer().GetComponent<CharacterStatus>().GetStatus(); //SaveUtils.GetPlayer().GetComponent<CharacterStatus>();
 
-            playerName = currentState.name;
-            level = currentState.level;
-            maxHealth = currentState.maxHealth;
-            currentHealth = currentState.currentHealth;
-            maxStamina = currentState.maxStamina;
-            currentStamina = currentState.currentStamina;
+            playerName = currentState["name"];
+            level =  Convert.ToInt32(currentState["level"]);
+            maxHealth = Convert.ToInt32(currentState["maxHealth"]);
+            currentHealth = Convert.ToInt32(currentState["currentHealth"]);
+            maxStamina = Convert.ToInt32(currentState["maxStamina"]);
+            currentStamina = Convert.ToInt32(currentState["currentStamina"]);
+            hunger = Convert.ToInt32(currentState["hunger"]);
+            gold = Convert.ToInt32(currentState["gold"]);
             
-            inv = currentState.GetComponent<Inventory>();
+
+            inv = SaveUtils.GetPlayer().GetComponent<Inventory>();
             invList = inv.CreateItemIDList();
-            database = currentState.database;
             database.CollectItems();
             invList.Reverse();
 
@@ -53,17 +66,27 @@ namespace Insolence.Core
         }
         public void UpdateCharacterState(GameObject player)
         {
+            Dictionary<string, string> currentState = new Dictionary<string, string>
+            {
+                { "name", playerName },
+                { "level", level.ToString() },
+                { "maxHealth", maxHealth.ToString() },
+                { "currentHealth", currentHealth.ToString() },
+                { "maxStamina", maxStamina.ToString() },
+                { "currentStamina", currentStamina.ToString() },
+                { "hunger", hunger.ToString() },
+                { "gold", gold.ToString() }
+            };
 
-            currentState = player.GetComponent<CharacterStatus>();
+            foreach (KeyValuePair<string, string> item in currentState)
+            {
+                Debug.Log("Updating Character State: " + item);
+            }
 
-            currentState.level = level;
-            currentState.maxHealth = maxHealth;
-            currentState.currentHealth = currentHealth;
-            currentState.maxStamina = maxStamina;
-            currentState.currentStamina = currentStamina;
-            currentState.name = playerName;
+            player.GetComponent<CharacterStatus>().SetStatus(currentState);
 
-            inv = currentState.GetComponent<Inventory>();
+
+            inv = player.GetComponent<Inventory>();
 
             foreach (string itemID in invList)
             {

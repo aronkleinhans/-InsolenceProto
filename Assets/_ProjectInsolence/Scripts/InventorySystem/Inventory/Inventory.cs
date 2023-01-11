@@ -21,8 +21,6 @@ namespace Insolence.Core
         [SerializeField] List<Item> bagItems = new List<Item>();
         [SerializeField] List<Item> essentialItems = new List<Item>();
 
-        [SerializeField] int gold;
-
         [Header("Equipped Items")]
         [SerializeField] public Item headSlot;
         [SerializeField] public Item chestSlot;
@@ -75,7 +73,7 @@ namespace Insolence.Core
         {
             Debug.Log("dropping " + item.name);
             GameObject droppedItem = Instantiate(item.itemPrefab, gameObject.transform.position + gameObject.transform.forward, Quaternion.LookRotation(gameObject.transform.forward));
-            droppedItem.transform.parent = GameObject.FindGameObjectWithTag("DynamicRoot").transform;
+            droppedItem.transform.parent = GameObject.FindGameObjectWithTag("DynamicRoot").transform.Find("Items").transform;
             droppedItem.GetComponent<Rigidbody>().AddForce(transform.forward * pushForce, ForceMode.VelocityChange);
 
 

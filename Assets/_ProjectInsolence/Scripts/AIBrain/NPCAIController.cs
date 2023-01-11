@@ -98,7 +98,7 @@ namespace Insolence.AIBrain
             while (counter > 0)
             {
                 yield return new WaitForSeconds(1);
-                this.gameObject.GetComponent<CharacterStatus>().hunger -= 1;
+                this.gameObject.GetComponent<CharacterStatus>().ChangeHunger(-1);
 
             }
             //determine hunger regen based on food type etc
